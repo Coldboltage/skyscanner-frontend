@@ -108,6 +108,26 @@
   margin-left: 0.5rem;
 }
 
+.inputForm {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputCollection {
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+}
+
+.flight {
+  color: #0070F3
+}
+
+/* .individualInput {
+
+} */
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;
