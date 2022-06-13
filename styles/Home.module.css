@@ -121,7 +121,7 @@
 }
 
 .flight {
-  color: #0070F3
+  color: #0070f3;
 }
 
 /* .individualInput {
@@ -133,7 +133,15 @@
     width: 100%;
     flex-direction: column;
   }
-  .inputForm, .inputCollection {
-    display: block
+  .inputForm,
+  .inputCollection {
+    display: block;
+  }
+}
+
+@media all and (orientation: portrait) {
+  .inputForm,
+  .inputCollection {
+    display: block;
   }
 }
