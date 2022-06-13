@@ -64,19 +64,19 @@ export default function Home() {
       console.log("Validation successful");
       const payload = {
         user: {
-          name: "Alan Reid",
-          email: "alandreid@hotmail.co.uk",
+          name: name,
+          email: email,
         },
-        ref: "f1-abu-2022",
+        ref: ref,
         flights: {
-          departure: "Dublin",
-          arrival: "Abu Dhabi (Any)",
+          departure: departure,
+          arrival: arrival,
         },
         dates: {
-          departureDate: "2022-11-08",
-          returnDate: "2022-11-29",
-          minimalHoliday: 10,
-          maximumHoliday: 14,
+          departureDate: departureDate,
+          returnDate: returnDate,
+          minimalHoliday: minimalHolidayTransform,
+          maximumHoliday: maximumHoliday,
           requiredDayStart: requiredDateStartTransform,
           requiredDayEnd: requiredDateEndTransform,
         },
@@ -96,9 +96,9 @@ export default function Home() {
       }
       console.log(payload);
       // Payload is ready
-      return payload;
+      return { payload, status: true };
     } else {
-      console.log("Something is missing");
+      console.log("Something is missing from the form. Please check the form");
       toast("Please check the form", {
         position: "top-right",
         autoClose: 5000,
@@ -108,22 +108,34 @@ export default function Home() {
         draggable: true,
         progress: undefined,
       });
+      return {status: false}
     }
   };
 
   const validateAndSend = async () => {
     const testObject = transformFormToDataTypes();
-    const payload = formValidation(testObject);
-    try {
-      const response = await fetch("https://skyscannerplusweb.herokuapp.com/api/users/create/", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        cors: "no-cors"
-      });
-      const data = await response.json()
-      console.log(data)
-    } catch (error) {
-      console.log(error);
+    const { payload, status } = formValidation(testObject);
+    console.log(payload)
+    if (status) {
+      try {
+        const response = await fetch(
+          "https://skyscannerplusweb.herokuapp.com/api/users/create/",
+          {
+            method: "POST",
+            headers: {
+              'Content-Type': "application/json",
+            },
+            body: JSON.stringify(payload),
+            cors: "no-cors",
+          }
+        );
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      "We didn't make a call to the server as a result of validation failure"
     }
   };
 
