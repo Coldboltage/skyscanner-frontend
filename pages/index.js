@@ -3,6 +3,7 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   const [name, setName] = useState();
@@ -59,7 +60,10 @@ export default function Home() {
       (requiredDateEndTransform > requiredDateStartTransform ||
         requiredDateStartTransform === undefined ||
         requiredDateEndTransform === undefined) &&
-      returnDateeTransform > departureDateTransform
+      returnDateeTransform > departureDateTransform &&
+      name.length > 0 &&
+      ref.length > 0 &&
+      email.length > 0
     ) {
       console.log("Validation successful");
       const payload = {
@@ -99,23 +103,23 @@ export default function Home() {
       return { payload, status: true };
     } else {
       console.log("Something is missing from the form. Please check the form");
-      toast("Please check the form", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      return {status: false}
+      // toast("Please check the form", {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      // });
+      return { status: false };
     }
   };
 
   const validateAndSend = async () => {
     const testObject = transformFormToDataTypes();
     const { payload, status } = formValidation(testObject);
-    console.log(payload)
+    console.log(payload);
     if (status) {
       try {
         const response = await fetch(
@@ -123,7 +127,7 @@ export default function Home() {
           {
             method: "POST",
             headers: {
-              'Content-Type': "application/json",
+              "Content-Type": "application/json",
             },
             body: JSON.stringify(payload),
             cors: "no-cors",
@@ -131,11 +135,29 @@ export default function Home() {
         );
         const data = await response.json();
         console.log(data);
+        toast('✅ The flight has been added!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
       } catch (error) {
         console.log(error);
       }
     } else {
-      "We didn't make a call to the server as a result of validation failure"
+      ("We didn't make a call to the server as a result of validation failure");
+      toast.error('Error with the form!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
     }
   };
 
@@ -146,7 +168,6 @@ export default function Home() {
         <meta name="description" content="Create a flight" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <main className={styles.main}>
         <h1 className={styles.title}>
           Create a <span className={styles.flight}>Flight</span>{" "}
@@ -296,7 +317,7 @@ export default function Home() {
           {/* </form> */}
         </div>
       </main>
-      <ToastContainer />
+
       <footer className={styles.footer}>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
