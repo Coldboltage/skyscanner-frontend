@@ -29,6 +29,7 @@ const AirportList = ({ text, state }) => {
         );
       })}
       {(airportTextCheck.length === 0 && text.length > 3) && <a>❌❌❌❌❌❌</a>}
+      {(airportTextCheck.length === 0 && text.length < 3) && <a>Please type more than three characters</a>}
     </>
   );
 };
