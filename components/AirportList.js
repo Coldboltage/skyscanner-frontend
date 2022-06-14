@@ -1,9 +1,11 @@
 import { useState } from "react";
-import updatedCodesLocations from "../constant/updatedCodesLocations";
+// import updatedCodesLocations from "../constant/updatedCodesLocations";
+import updatedCodesLocations from "../constant/singleNameCombined";
+
 
 const AirportList = ({ text, state }) => {
   // We've got text, let's do something with it
-  const airportTextCheck = updatedCodesLocations.filter((element, index) => {
+  let airportTextCheck = updatedCodesLocations.filter((element, index) => {
     // if text only has two characters, fail it
     if (text.length < 3) {
       return false;
@@ -16,6 +18,7 @@ const AirportList = ({ text, state }) => {
       element.location.toLowerCase().includes(text.toLowerCase())
     );
   });
+  airportTextCheck.sort((a,b) => {return a.skyscannerNameWithCode.length - b.skyscannerNameWithCode.length})
   console.log(airportTextCheck);
   return (
     <>

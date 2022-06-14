@@ -131,6 +131,7 @@ export default function Home() {
       try {
         const response = await fetch(
           "https://skyscannerplusweb.herokuapp.com/api/users/create/",
+          // "http://localhost:8001/api/users/create/",
           {
             method: "POST",
             headers: {
