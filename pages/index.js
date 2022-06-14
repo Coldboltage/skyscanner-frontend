@@ -1,22 +1,29 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+
+// Component List
+import AirportList from "../components/AirportList";
 
 export default function Home() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [ref, setRef] = useState();
-  const [departure, setDeparture] = useState();
-  const [arrival, setArrival] = useState();
+  const [departure, setDeparture] = useState("");
+  const [arrival, setArrival] = useState("");
   const [departureDate, setDepartureDate] = useState();
   const [returnDate, setReturnDate] = useState();
   const [minimalHoliday, setMinimalHolday] = useState();
   const [maximumHoliday, setMaximumHoliday] = useState();
   const [requiredDateStart, setRequiredDateStart] = useState();
   const [requiredDateEnd, setRequiredDateEnd] = useState();
+
+  // useEffect(() => {
+  //   airportTextCheck(departure)
+  // }, departure)
 
   // State for managed dates
 
@@ -135,7 +142,7 @@ export default function Home() {
         );
         const data = await response.json();
         console.log(data);
-        toast('✅ The flight has been added!', {
+        toast("✅ The flight has been added!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -143,13 +150,13 @@ export default function Home() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          });
+        });
       } catch (error) {
         console.log(error);
       }
     } else {
       ("We didn't make a call to the server as a result of validation failure");
-      toast.error('Error with the form!', {
+      toast.error("Error with the form!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -157,7 +164,7 @@ export default function Home() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
     }
   };
 
@@ -216,21 +223,34 @@ export default function Home() {
               <div>
                 {" "}
                 <label htmlFor="departure">Departure</label>
-                <input
-                  value={departure}
-                  onChange={(e) => setDeparture(e.target.value)}
-                  type="text"
-                  placeholder="departure"
-                />
+                {/* Departure Dropdown */}
+                <div className={styles.dropdown}>
+                  <input
+                    className={styles.dropbtn}
+                    value={departure}
+                    onChange={(e) => setDeparture(e.target.value)}
+                    type="text"
+                    placeholder="departure"
+                  />
+                  <div className={styles.dropdownContent}>
+                    <AirportList text={departure} state={setDeparture}/>
+                  </div>
+                </div>
               </div>
               <div>
                 <label htmlFor="arrival">Arrival</label>
-                <input
-                  value={arrival}
-                  onChange={(e) => setArrival(e.target.value)}
-                  type="text"
-                  placeholder="arrival"
-                />
+                <div className={styles.dropdown}>
+                  <input
+                    className={styles.dropbtn}
+                    value={arrival}
+                    onChange={(e) => setArrival(e.target.value)}
+                    type="text"
+                    placeholder="arrival"
+                  />
+                  <div className={styles.dropdownContent}>
+                  <AirportList text={arrival} state={setArrival}/>
+                  </div>
+                </div>
               </div>
               <div>
                 <label htmlFor="departureDate">Departure Date</label>
@@ -296,22 +316,6 @@ export default function Home() {
           <input
             style={{ marginTop: "30px" }}
             type="submit"
-            // onClick={() => {
-            //   console.log(name);
-            //   console.log({
-            //     name,
-            //     ref,
-            //     email,
-            //     departure,
-            //     arrival,
-            //     departureDate,
-            //     returnDate,
-            //     minimalHoliday,
-            //     maximumHoliday,
-            //     requiredDateStart,
-            //     requiredDateEnd,
-            //   });
-            // }}
             onClick={validateAndSend}
           />
           {/* </form> */}
