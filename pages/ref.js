@@ -177,11 +177,13 @@ export default function Ref() {
           <meta name="description" content="Find your flight by reference" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main className={styles.main}>
+        <div className={styles.titleDiv}>
           <h1 className={styles.title}>
             Find your flight by a{" "}
             <span className={styles.flight}>Reference</span>{" "}
           </h1>
+        </div>
+        <main className={styles.main}>
           <div>
             <div className={styles.referenceInput}>
               <h3>Your reference</h3>
@@ -363,7 +365,13 @@ export default function Ref() {
                 <div className={styles.flightsContainer}>
                   {" "}
                   {cheapestFlights.map((element, index) => {
-                    return <CheapestFlightsItem key={index} flight={element} bestOrCheapest="cheapest"/>;
+                    return (
+                      <CheapestFlightsItem
+                        key={index}
+                        flight={element}
+                        bestOrCheapest="cheapest"
+                      />
+                    );
                   })}
                 </div>
               </div>
@@ -376,7 +384,13 @@ export default function Ref() {
                 <div className={styles.flightsContainer}>
                   {" "}
                   {cheapestFlights.map((element, index) => {
-                    return <CheapestFlightsItem key={index} flight={element} bestOrCheapest="best"/>;
+                    return (
+                      <CheapestFlightsItem
+                        key={index}
+                        flight={element}
+                        bestOrCheapest="best"
+                      />
+                    );
                   })}
                 </div>
               </div>

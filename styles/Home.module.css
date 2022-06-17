@@ -9,6 +9,11 @@
   margin: 0 auto;
 }
 
+.titleDiv {
+  display: flex;
+  justify-content: center;
+}
+
 .footer {
   display: flex;
   flex: 1;

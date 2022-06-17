@@ -11,9 +11,8 @@ import AirportList from "../components/AirportList";
 
 export default function Home() {
   // Console.log test
-  console.log(process.env.LOCALHOST)
+  console.log(process.env.LOCALHOST);
 
-  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [ref, setRef] = useState("");
@@ -137,7 +136,9 @@ export default function Home() {
         const response = await fetch(
           // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
           // "http://localhost:8001/api/users/create/",
-          `${process.env.LOCALHOST || "https://skyscannerplusweb.herokuapp.com"}/api/users/create/`,
+          `${
+            process.env.LOCALHOST || "https://skyscannerplusweb.herokuapp.com"
+          }/api/users/create/`,
           {
             method: "POST",
             headers: {
@@ -183,10 +184,12 @@ export default function Home() {
           <meta name="description" content="Create a flight" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main className={styles.main}>
+        <div className={styles.titleDiv}>
           <h1 className={styles.title}>
             Create a <span className={styles.flight}>Flight</span>{" "}
           </h1>
+        </div>
+        <main className={styles.main}>
           <div>
             {/* <form> */}
             <div className={styles.inputForm}>
