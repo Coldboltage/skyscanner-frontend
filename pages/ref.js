@@ -4,13 +4,14 @@ import styles from "../styles/Ref.module.css";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as dayjs from 'dayjs'
 
 // Component List
 import Layout from "../components/Layout";
 import AirportList from "../components/AirportList";
 export default function Ref() {
   // Console.log test
-  console.log(process.env.LOCALHOST)
+  console.log(`env ${process.env.NEXT_PUBLIC_LOCALHOST}`)
 
 
   const [name, setName] = useState("");
@@ -35,52 +36,11 @@ export default function Ref() {
   // State for managed dates
 
   // Makes sure the code is set correctly for API consumption
-  const formValidation = ({
-    departureDateTransform,
-    returnDateeTransform,
-    minimalHolidayTransform,
-    maximumHolidayTransform,
-    requiredDateStartTransform,
-    requiredDateEndTransform,
-  }) => {
-    // Validation that's needed to be completed
-    // 1) Max Holiday needs to be greater than or equal to minimal holiday
-    // 2) Return Date needs to be greater than or equal to departure date
-    // 3) RequiredDateEnd needs to be greater than or equal to RequiredDateStart
-    if (
-      maximumHolidayTransform >= minimalHolidayTransform &&
-      (requiredDateEndTransform > requiredDateStartTransform ||
-        requiredDateStartTransform === undefined ||
-        requiredDateEndTransform === undefined) &&
-      returnDateeTransform > departureDateTransform &&
-      name.length > 0 &&
-      ref.length > 0 &&
-      email.length > 0
-    ) {
+  const formValidation = ({}) => {
+    // Check if Reference exists. True or false
+
+    if (status = true) {
       console.log("Validation successful");
-      const payload = {
-        user: {
-          name: name,
-          email: email,
-        },
-        ref: ref,
-        flights: {
-          departure: departure,
-          arrival: arrival,
-        },
-        dates: {
-          departureDate: departureDate,
-          returnDate: returnDate,
-          minimalHoliday: minimalHolidayTransform,
-          maximumHoliday: maximumHoliday,
-          requiredDayStart: requiredDateStartTransform,
-          requiredDayEnd: requiredDateEndTransform,
-        },
-        workerPID: 0,
-        isBeingScanned: false,
-        scannedLast: 0,
-        nextScan: 0,
-      };
       if (
         requiredDateStartTransform === undefined ||
         requiredDateEndTransform === undefined
@@ -109,6 +69,7 @@ export default function Ref() {
   };
 
   const validateAndSend = async () => {
+    // We should be using higher order functions here but I want to work on this now. TODO
     const testObject = transformFormToDataTypes();
     const { payload, status } = formValidation(testObject);
     console.log(payload);
@@ -155,6 +116,38 @@ export default function Ref() {
     }
   };
 
+  const testReference = async (reference) => {
+    console.log(`I'm making a call to /reference-info-latest-flight with the reference: ${reference}`)
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_LOCALHOST || "https://skyscannerplusweb.herokuapp.com"}/api/flights/reference-info-latest-flight/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          cors: "no-cors",
+          body: JSON.stringify({reference: reference})
+        },
+      )
+      console.log("Sent")
+      const data = await response.json()
+      console.log(data)
+      // Destructure Result
+      const {user: {name, email}, ref, flights:{arrival, departure}, dates: {departureDate, returnDate, minimalHoliday, maximumHoliday}} = data
+      setName(name)
+      setEmail(email)
+      setRef(ref)
+      setArrival(arrival)
+      setDeparture(departure)
+      setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"))
+      setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"))
+      setMinimalHolday(minimalHoliday)
+      setMaximumHoliday(maximumHoliday)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <Layout>
       <div className={styles.container}>
@@ -176,7 +169,7 @@ export default function Ref() {
                   <label>Your reference</label>
                   <input type="text" value={typedState} onChange={(e) => setTypedState(e.target.value)}/>
                 </div>
-                <input type="submit" onClick={(e)=>console.log(typedState)}/>
+                <input type="submit" onClick={() => testReference(typedState)}/>
               </div>
             </div>
             {/* <form> */}
@@ -262,8 +255,8 @@ export default function Ref() {
                     disabled
                     value={departureDate}
                     onChange={(e) => setDepartureDate(e.target.value)}
-                    type="date"
-                    placceholder="departure date"
+                    type="text"
+                    placeholder="departure date"
                   />
                 </div>
                 <div>
@@ -272,7 +265,7 @@ export default function Ref() {
                     disabled
                     value={returnDate}
                     onChange={(e) => setReturnDate(e.target.value)}
-                    type="date"
+                    type="text"
                     placeholder="return date"
                   />
                 </div>

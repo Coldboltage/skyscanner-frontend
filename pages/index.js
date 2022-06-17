@@ -137,7 +137,7 @@ export default function Home() {
         const response = await fetch(
           // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
           // "http://localhost:8001/api/users/create/",
-          `${process.env.DB_HOST || "https://skyscannerplusweb.herokuapp.com"}/api/users/create/`,
+          `${process.env.LOCALHOST || "https://skyscannerplusweb.herokuapp.com"}/api/users/create/`,
           {
             method: "POST",
             headers: {
