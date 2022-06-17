@@ -4,15 +4,16 @@ import styles from "../styles/ref.module.css";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import * as dayjs from 'dayjs'
+import * as dayjs from "dayjs";
 
 // Component List
 import Layout from "../components/Layout";
 import AirportList from "../components/AirportList";
+import CheapestFlightsItem from "../components/CheapestFlightsItem";
+
 export default function Ref() {
   // Console.log test
-  console.log(`env ${process.env.NEXT_PUBLIC_LOCALHOST}`)
-
+  console.log(`env ${process.env.NEXT_PUBLIC_LOCALHOST}`);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -26,8 +27,12 @@ export default function Ref() {
   const [requiredDateStart, setRequiredDateStart] = useState();
   const [requiredDateEnd, setRequiredDateEnd] = useState();
 
-  // State specifically for /ref 
-  const [typedState, setTypedState] = useState("")
+  // State specifically for /ref
+  const [typedState, setTypedState] = useState("");
+  const [cheapestFlights, setCheapestFlights] = useState([]);
+  const [bestFlights, setBestFlights] = useState([]);
+
+  console.log(cheapestFlights);
 
   // useEffect(() => {
   //   airportTextCheck(departure)
@@ -39,7 +44,7 @@ export default function Ref() {
   const formValidation = ({}) => {
     // Check if Reference exists. True or false
 
-    if (status = true) {
+    if ((status = true)) {
       console.log("Validation successful");
       if (
         requiredDateStartTransform === undefined ||
@@ -78,7 +83,7 @@ export default function Ref() {
         const response = await fetch(
           // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
           // "http://localhost:8001/api/users/create/",
-          
+
           {
             method: "POST",
             headers: {
@@ -117,36 +122,52 @@ export default function Ref() {
   };
 
   const testReference = async (reference) => {
-    console.log(`I'm making a call to /reference-info-latest-flight with the reference: ${reference}`)
+    console.log(
+      `I'm making a call to /reference-info-latest-flight with the reference: ${reference}`
+    );
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_LOCALHOST || "https://skyscannerplusweb.herokuapp.com"}/api/flights/reference-info-latest-flight/`, {
+        `${
+          process.env.NEXT_PUBLIC_LOCALHOST ||
+          "https://skyscannerplusweb.herokuapp.com"
+        }/api/flights/reference-info-latest-flight/`,
+        {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
           cors: "no-cors",
-          body: JSON.stringify({reference: reference})
-        },
-      )
-      console.log("Sent")
-      const data = await response.json()
-      console.log(data)
+          body: JSON.stringify({ reference: reference }),
+        }
+      );
+      console.log("Sent");
+      const data = await response.json();
+      console.log(data);
       // Destructure Result
-      const {user: {name, email}, ref, flights:{arrival, departure}, dates: {departureDate, returnDate, minimalHoliday, maximumHoliday}} = data
-      setName(name)
-      setEmail(email)
-      setRef(ref)
-      setArrival(arrival)
-      setDeparture(departure)
-      setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"))
-      setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"))
-      setMinimalHolday(minimalHoliday)
-      setMaximumHoliday(maximumHoliday)
+      const {
+        user: { name, email },
+        ref,
+        flights: { arrival, departure },
+        dates: { departureDate, returnDate, minimalHoliday, maximumHoliday },
+      } = data.result;
+      setName(name);
+      setEmail(email);
+      setRef(ref);
+      setArrival(arrival);
+      setDeparture(departure);
+      setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
+      setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
+      setMinimalHolday(minimalHoliday);
+      setMaximumHoliday(maximumHoliday);
+      // Checking latestFlight
+      const { bestFlightsOrderMax, cheapestFlightsOrderMax } =
+        data.latestFlights;
+      setCheapestFlights(cheapestFlightsOrderMax);
+      setBestFlights(bestFlightsOrderMax);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <Layout>
@@ -167,9 +188,16 @@ export default function Ref() {
               <div>
                 <div>
                   <label>Your reference</label>
-                  <input type="text" value={typedState} onChange={(e) => setTypedState(e.target.value)}/>
+                  <input
+                    type="text"
+                    value={typedState}
+                    onChange={(e) => setTypedState(e.target.value)}
+                  />
                 </div>
-                <input type="submit" onClick={() => testReference(typedState)}/>
+                <input
+                  type="submit"
+                  onClick={() => testReference(typedState)}
+                />
               </div>
             </div>
             {/* <form> */}
@@ -327,25 +355,34 @@ export default function Ref() {
             /> */}
             {/* </form> */}
           </div>
+          {/* Check if flight exists */}
+          {cheapestFlights.length > 0 && (
+            <>
+              <div className={styles.inputForm}>
+                <h3>Cheapest Flights</h3>
+                <div className={styles.flightsContainer}>
+                  {" "}
+                  {cheapestFlights.map((element, index) => {
+                    return <CheapestFlightsItem key={index} flight={element} bestOrCheapest="cheapest"/>;
+                  })}
+                </div>
+              </div>
+            </>
+          )}
+          {bestFlights.length > 0 && (
+            <>
+              <div className={styles.inputForm}>
+                <h3>Best Flights</h3>
+                <div className={styles.flightsContainer}>
+                  {" "}
+                  {cheapestFlights.map((element, index) => {
+                    return <CheapestFlightsItem key={index} flight={element} bestOrCheapest="best"/>;
+                  })}
+                </div>
+              </div>
+            </>
+          )}
         </main>
-
-        <footer className={styles.footer}>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Powered by{" "}
-            <span className={styles.logo}>
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                width={72}
-                height={16}
-              />
-            </span>
-          </a>
-        </footer>
       </div>
     </Layout>
   );

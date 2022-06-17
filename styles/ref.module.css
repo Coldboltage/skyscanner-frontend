@@ -4,23 +4,9 @@
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
-  align-items: center;
-}
-
-.footer {
-  display: flex;
-  flex: 1;
-  padding: 2rem 0;
-  border-top: 1px solid #eaeaea;
-  justify-content: center;
-  align-items: center;
-}
-
-.footer a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .title a {
@@ -161,6 +147,19 @@
 /* Change the background color of the dropdown button when the dropdown content is shown */
 /* .dropdown:hover .dropbtn {background-color: #3e8e41;} */
 
+.flightsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: space-between;
+  min-width: 1000px;
+  gap: 40px
+}
+
+/* CheapestFlighsItem */
+.titleItem {
+  font-weight: bolder;
+}
+
 @media (max-width: 700px) {
   .grid {
     width: 100%;
@@ -169,6 +168,15 @@
   .inputForm,
   .inputCollection {
     display: block;
+  }
+  .flightsContainer {
+    display: block;
+  }
+}
+
+@media (max-width: 1300px) {
+  .flightsContainer {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

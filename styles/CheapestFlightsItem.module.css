@@ -1,0 +1,29 @@
+.inputForm {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+/* CheapestFlighsItem */
+.titleItem {
+  font-weight: bolder;
+}
+
+.individualPara {
+  margin-bottom:5px;
+}
+
+.link {
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .inputForm {
+    display: block;
+  }
+}
+
+@media all and (orientation: portrait) {
+  .inputForm {
+    display: block;
+  }
+}
