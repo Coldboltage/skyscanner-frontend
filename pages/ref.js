@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import styles from "../styles/Home.module.css";
+import styles from "../styles/Ref.module.css";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,12 +8,11 @@ import "react-toastify/dist/ReactToastify.css";
 // Component List
 import Layout from "../components/Layout";
 import AirportList from "../components/AirportList";
-
-export default function Home() {
+export default function Ref() {
   // Console.log test
   console.log(process.env.LOCALHOST)
 
-  
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [ref, setRef] = useState("");
@@ -26,33 +25,14 @@ export default function Home() {
   const [requiredDateStart, setRequiredDateStart] = useState();
   const [requiredDateEnd, setRequiredDateEnd] = useState();
 
+  // State specifically for /ref 
+  const [typedState, setTypedState] = useState("")
+
   // useEffect(() => {
   //   airportTextCheck(departure)
   // }, departure)
 
   // State for managed dates
-
-  // Form outputs strings so we need to transform the data properly
-  const transformFormToDataTypes = () => {
-    const departureDateTransform = new Date(departureDate);
-    const returnDateeTransform = new Date(returnDate);
-    const minimalHolidayTransform = Number(minimalHoliday);
-    const maximumHolidayTransform = Number(maximumHoliday);
-    let requiredDateStartTransform;
-    let requiredDateEndTransform;
-    if (requiredDateStart && requiredDateEnd) {
-      requiredDateStartTransform = new Date(requiredDateStart);
-      requiredDateEndTransform = new Date(requiredDateEnd);
-    }
-    return {
-      departureDateTransform,
-      returnDateeTransform,
-      minimalHolidayTransform,
-      maximumHolidayTransform,
-      requiredDateStartTransform,
-      requiredDateEndTransform,
-    };
-  };
 
   // Makes sure the code is set correctly for API consumption
   const formValidation = ({
@@ -137,7 +117,7 @@ export default function Home() {
         const response = await fetch(
           // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
           // "http://localhost:8001/api/users/create/",
-          `${process.env.DB_HOST || "https://skyscannerplusweb.herokuapp.com"}/api/users/create/`,
+          
           {
             method: "POST",
             headers: {
@@ -180,14 +160,25 @@ export default function Home() {
       <div className={styles.container}>
         <Head>
           <title>Create Flight</title>
-          <meta name="description" content="Create a flight" />
+          <meta name="description" content="Find your flight by reference" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main className={styles.main}>
           <h1 className={styles.title}>
-            Create a <span className={styles.flight}>Flight</span>{" "}
+            Find your flight by a{" "}
+            <span className={styles.flight}>Reference</span>{" "}
           </h1>
           <div>
+            <div className={styles.referenceInput}>
+              <h3>Your reference</h3>
+              <div>
+                <div>
+                  <label>Your reference</label>
+                  <input type="text" value={typedState} onChange={(e) => setTypedState(e.target.value)}/>
+                </div>
+                <input type="submit" onClick={(e)=>console.log(typedState)}/>
+              </div>
+            </div>
             {/* <form> */}
             <div className={styles.inputForm}>
               <h3>General Details</h3>
@@ -196,6 +187,7 @@ export default function Home() {
                   {" "}
                   <label htmlFor="name">Name</label>
                   <input
+                    disabled
                     value={name}
                     onChange={(e) => {
                       setName(e.target.value);
@@ -208,6 +200,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="reference">Reference</label>
                   <input
+                    disabled
                     value={ref}
                     onChange={(e) => setRef(e.target.value)}
                     type="text"
@@ -217,6 +210,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="email">Email Address</label>
                   <input
+                    disabled
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     type="email"
@@ -234,6 +228,7 @@ export default function Home() {
                   {/* Departure Dropdown */}
                   <div className={styles.dropdown}>
                     <input
+                      disabled
                       className={styles.dropbtn}
                       value={departure}
                       onChange={(e) => setDeparture(e.target.value)}
@@ -249,6 +244,7 @@ export default function Home() {
                   <label htmlFor="arrival">Arrival</label>
                   <div className={styles.dropdown}>
                     <input
+                      disabled
                       className={styles.dropbtn}
                       value={arrival}
                       onChange={(e) => setArrival(e.target.value)}
@@ -263,6 +259,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="departureDate">Departure Date</label>
                   <input
+                    disabled
                     value={departureDate}
                     onChange={(e) => setDepartureDate(e.target.value)}
                     type="date"
@@ -272,6 +269,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="returnDate">Return Date</label>
                   <input
+                    disabled
                     value={returnDate}
                     onChange={(e) => setReturnDate(e.target.value)}
                     type="date"
@@ -283,6 +281,7 @@ export default function Home() {
                     Minimal Holiday Duration
                   </label>
                   <input
+                    disabled
                     value={minimalHoliday}
                     onChange={(e) => setMinimalHolday(e.target.value)}
                     type="number"
@@ -294,6 +293,7 @@ export default function Home() {
                     Maximum Holiday Duration
                   </label>
                   <input
+                    disabled
                     value={maximumHoliday}
                     onChange={(e) => setMaximumHoliday(e.target.value)}
                     type="number"
@@ -308,6 +308,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="requiredDateBeginning">Beginning</label>
                   <input
+                    disabled
                     value={requiredDateStart}
                     onChange={(e) => setRequiredDateStart(e.target.value)}
                     type="date"
@@ -317,6 +318,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="requiredDateEnding">Ending</label>
                   <input
+                    disabled
                     value={requiredDateEnd}
                     onChange={(e) => setRequiredDateEnd(e.target.value)}
                     type="date"
@@ -325,11 +327,11 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <input
+            {/* <input disabled
               style={{ marginTop: "30px" }}
               type="submit"
               onClick={validateAndSend}
-            />
+            /> */}
             {/* </form> */}
           </div>
         </main>

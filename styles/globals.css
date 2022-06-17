@@ -13,6 +13,8 @@ a {
 
 * {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 input[type="date"] {
@@ -32,3 +34,7 @@ input[type="date"] {
   border: 1px solid #bbb;
   cursor: pointer;
   box-sizing: border-box; }
+
+  /* h1, h2, h3, h4, h5, h6 {
+    margin: 2px
+  } */
