@@ -17,19 +17,16 @@ const cheapestFlightsItem = ({ flight, bestOrCheapest }) => {
         {departDate} - {returnDate}
       </div>
       <div className={styles.individualPara}>
-        <span className={styles.titleItem}>Time</span>
-        {` `}
+        <span className={styles.titleItem}>Time</span>:{` `}
         {time} - {arrival}
       </div>
       <div className={styles.individualPara}>
-        <span className={styles.titleItem}>Duration</span>
-        {` `}
+        <span className={styles.titleItem}>Duration</span>:{` `}
         {durationOfFlight}
       </div>
       <div className={styles.individualPara}>
         <a href={url} className={`${styles.individualPara} ${styles.link}`}>
-          <span className={styles.titleItem}>Skyscanner Link</span>
-          {` `}
+          <span className={styles.titleItem}>Skyscanner Link</span>:{` `}
           <a href={url}>Flight Link</a>
         </a>
       </div>
