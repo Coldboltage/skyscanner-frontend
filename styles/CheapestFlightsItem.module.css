@@ -19,6 +19,7 @@
 @media (max-width: 700px) {
   .inputForm {
     display: block;
+    margin-bottom: 30px
   }
 }
 

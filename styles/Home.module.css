@@ -173,10 +173,6 @@
 /* .dropdown:hover .dropbtn {background-color: #3e8e41;} */
 
 @media (max-width: 700px) {
-  .grid {
-    width: 100%;
-    flex-direction: column;
-  }
   .inputForm,
   .inputCollection {
     display: block;
