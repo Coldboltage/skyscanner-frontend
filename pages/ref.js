@@ -141,29 +141,51 @@ export default function Ref() {
         }
       );
       console.log("Sent");
-      const data = await response.json();
-      console.log(data);
-      // Destructure Result
-      const {
-        user: { name, email },
-        ref,
-        flights: { arrival, departure },
-        dates: { departureDate, returnDate, minimalHoliday, maximumHoliday },
-      } = data.result;
-      setName(name);
-      setEmail(email);
-      setRef(ref);
-      setArrival(arrival);
-      setDeparture(departure);
-      setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
-      setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
-      setMinimalHolday(minimalHoliday);
-      setMaximumHoliday(maximumHoliday);
-      // Checking latestFlight
-      const { bestFlightsOrderMax, cheapestFlightsOrderMax } =
-        data.latestFlights;
-      setCheapestFlights(cheapestFlightsOrderMax);
-      setBestFlights(bestFlightsOrderMax);
+      console.log(response)
+      if ((response.ok === true)) {
+        toast.success('Flight found!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
+        const data = await response.json();
+        // Destructure Result
+        const {
+          user: { name, email },
+          ref,
+          flights: { arrival, departure },
+          dates: { departureDate, returnDate, minimalHoliday, maximumHoliday },
+        } = data.result;
+        setName(name);
+        setEmail(email);
+        setRef(ref);
+        setArrival(arrival);
+        setDeparture(departure);
+        setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
+        setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
+        setMinimalHolday(minimalHoliday);
+        setMaximumHoliday(maximumHoliday);
+        // Checking latestFlight
+        const { bestFlightsOrderMax, cheapestFlightsOrderMax } =
+          data.latestFlights;
+        setCheapestFlights(cheapestFlightsOrderMax);
+        setBestFlights(bestFlightsOrderMax);
+      } else {
+        console.log("Nothing was found")
+        toast.error('No flight could be found with that reference', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
+      }
     } catch (error) {
       console.log(error);
     }
