@@ -27,7 +27,7 @@ export default function Ref() {
   const [requiredDateStart, setRequiredDateStart] = useState();
   const [requiredDateEnd, setRequiredDateEnd] = useState();
 
-  // State specifically for /ref
+  // State specifically for /email
   const [typedState, setTypedState] = useState("");
   const [cheapestFlights, setCheapestFlights] = useState([]);
   const [bestFlights, setBestFlights] = useState([]);
@@ -40,23 +40,23 @@ export default function Ref() {
 
   // State for managed dates
 
-  const getEmail = async (reference) => {
+  const getEmail = async (email) => {
     console.log(
-      `I'm making a call to /reference-info-latest-flight with the reference: ${reference}`
+      `I'm making a call to /get-references-by-email with the email: ${email}`
     );
     try {
       const response = await fetch(
         `${
           process.env.NEXT_PUBLIC_LOCALHOST ||
           "https://skyscannerplusweb.herokuapp.com"
-        }/api/flights/reference-info-latest-flight/`,
+        }/api/flights/get-references-by-email/`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           cors: "no-cors",
-          body: JSON.stringify({ reference: reference }),
+          body: JSON.stringify({ email: email }),
         }
       );
       console.log("Sent");
@@ -79,20 +79,19 @@ export default function Ref() {
           flights: { arrival, departure },
           dates: { departureDate, returnDate, minimalHoliday, maximumHoliday },
         } = data.result;
-        setName(name);
         setEmail(email);
-        setRef(ref);
-        setArrival(arrival);
-        setDeparture(departure);
-        setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
-        setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
-        setMinimalHolday(minimalHoliday);
-        setMaximumHoliday(maximumHoliday);
+        // setRef(ref);
+        // setArrival(arrival);
+        // setDeparture(departure);
+        // setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
+        // setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
+        // setMinimalHolday(minimalHoliday);
+        // setMaximumHoliday(maximumHoliday);
         // Checking latestFlight
-        const { bestFlightsOrderMax, cheapestFlightsOrderMax } =
-          data.latestFlights;
-        setCheapestFlights(cheapestFlightsOrderMax);
-        setBestFlights(bestFlightsOrderMax);
+      //   const { bestFlightsOrderMax, cheapestFlightsOrderMax } =
+      //     data.latestFlights;
+      //   setCheapestFlights(cheapestFlightsOrderMax);
+      //   setBestFlights(bestFlightsOrderMax);
       } else {
         console.log("Nothing was found")
         toast.error('No flight could be found with that reference', {
