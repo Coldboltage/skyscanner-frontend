@@ -59,7 +59,7 @@ export default function Ref() {
       console.log("Sent");
       console.log(response)
       if ((response.ok === true)) {
-        toast.success('Flight found!', {
+        toast.success('Email found on database!', {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -77,7 +77,7 @@ export default function Ref() {
         setResult(result);
       } else {
         console.log("Nothing was found")
-        toast.error('No flight could be found with that reference', {
+        toast.error('That email address was not found', {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,

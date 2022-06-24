@@ -11,10 +11,10 @@ import Layout from "../components/Layout";
 import AirportList from "../components/AirportList";
 import CheapestFlightsItem from "../components/CheapestFlightsItem";
 
-export default function Ref({query:{ref: queryRef}}) {
+export default function Ref({ query: { ref: queryRef } }) {
   // Console.log test
   console.log(`env ${process.env.NEXT_PUBLIC_LOCALHOST}`);
-  console.log(queryRef)
+  console.log(queryRef);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,10 +35,12 @@ export default function Ref({query:{ref: queryRef}}) {
 
   useEffect(() => {
     const fetchData = async () => {
-      await testReference(typedState)
+      await testReference(typedState);
+    };
+    if (ref) {
+      fetchData();
     }
-    fetchData()
-  }, [])
+  }, []);
 
   console.log(cheapestFlights);
 
@@ -96,7 +98,7 @@ export default function Ref({query:{ref: queryRef}}) {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              'Access-Control-Allow-Origin': '*'
+              "Access-Control-Allow-Origin": "*",
             },
             body: JSON.stringify(payload),
             cors: "no-cors",
@@ -150,9 +152,9 @@ export default function Ref({query:{ref: queryRef}}) {
         }
       );
       console.log("Sent");
-      console.log(response)
-      if ((response.ok === true)) {
-        toast.success('Flight found!', {
+      console.log(response);
+      if (response.ok === true) {
+        toast.success("Flight found!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -160,7 +162,7 @@ export default function Ref({query:{ref: queryRef}}) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          });
+        });
         const data = await response.json();
         // Destructure Result
         const {
@@ -184,8 +186,8 @@ export default function Ref({query:{ref: queryRef}}) {
         setCheapestFlights(cheapestFlightsOrderMax);
         setBestFlights(bestFlightsOrderMax);
       } else {
-        console.log("Nothing was found")
-        toast.error('No flight could be found with that reference', {
+        console.log("Nothing was found");
+        toast.error("No flight could be found with that reference", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -193,7 +195,7 @@ export default function Ref({query:{ref: queryRef}}) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          });
+        });
       }
     } catch (error) {
       console.log(error);
@@ -434,8 +436,8 @@ export default function Ref({query:{ref: queryRef}}) {
 }
 
 export async function getServerSideProps(context) {
-  console.log(context.query)
+  console.log(context.query);
   return {
-    props: {query: context.query}
-  }
+    props: { query: context.query },
+  };
 }
