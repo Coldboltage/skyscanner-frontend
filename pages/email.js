@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import styles from "../styles/ref.module.css";
+import styles from "../styles/Email.module.css";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,7 +8,7 @@ import * as dayjs from "dayjs";
 
 // Component List
 import Layout from "../components/Layout";
-import AirportList from "../components/AirportList";
+import ReferenceItem from "../components/ReferenceList"
 import CheapestFlightsItem from "../components/CheapestFlightsItem";
 
 export default function Ref() {
@@ -29,10 +29,7 @@ export default function Ref() {
 
   // State specifically for /email
   const [typedState, setTypedState] = useState("");
-  const [cheapestFlights, setCheapestFlights] = useState([]);
-  const [bestFlights, setBestFlights] = useState([]);
-
-  console.log(cheapestFlights);
+  const [result, setResult] = useState([]);
 
   // useEffect(() => {
   //   airportTextCheck(departure)
@@ -74,24 +71,10 @@ export default function Ref() {
         const data = await response.json();
         // Destructure Result
         const {
-          user: { name, email },
-          ref,
-          flights: { arrival, departure },
-          dates: { departureDate, returnDate, minimalHoliday, maximumHoliday },
-        } = data.result;
-        setEmail(email);
-        // setRef(ref);
-        // setArrival(arrival);
-        // setDeparture(departure);
-        // setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
-        // setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
-        // setMinimalHolday(minimalHoliday);
-        // setMaximumHoliday(maximumHoliday);
-        // Checking latestFlight
-      //   const { bestFlightsOrderMax, cheapestFlightsOrderMax } =
-      //     data.latestFlights;
-      //   setCheapestFlights(cheapestFlightsOrderMax);
-      //   setBestFlights(bestFlightsOrderMax);
+          result,
+          message
+        } = data;
+        setResult(result);
       } else {
         console.log("Nothing was found")
         toast.error('No flight could be found with that reference', {
@@ -144,37 +127,18 @@ export default function Ref() {
             </div>
           </div>
           {/* Check if flight exists */}
-          {cheapestFlights.length > 0 && (
+          {result.length > 0 && (
             <>
               <div className={styles.inputForm}>
-                <h3>Cheapest Flights</h3>
+                <h3>References</h3>
                 <div className={styles.flightsContainer}>
                   {" "}
-                  {cheapestFlights.map((element, index) => {
+                  {result.map((element, index) => {
+                    console.log(element)
                     return (
-                      <CheapestFlightsItem
+                      <ReferenceItem
                         key={index}
-                        flight={element}
-                        bestOrCheapest="cheapest"
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            </>
-          )}
-          {bestFlights.length > 0 && (
-            <>
-              <div className={styles.inputForm}>
-                <h3>Best Flights</h3>
-                <div className={styles.flightsContainer}>
-                  {" "}
-                  {cheapestFlights.map((element, index) => {
-                    return (
-                      <CheapestFlightsItem
-                        key={index}
-                        flight={element}
-                        bestOrCheapest="best"
+                        reference={element}
                       />
                     );
                   })}
