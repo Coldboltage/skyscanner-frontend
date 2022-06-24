@@ -11,13 +11,14 @@ import Layout from "../components/Layout";
 import AirportList from "../components/AirportList";
 import CheapestFlightsItem from "../components/CheapestFlightsItem";
 
-export default function Ref() {
+export default function Ref({query:{ref: queryRef}}) {
   // Console.log test
   console.log(`env ${process.env.NEXT_PUBLIC_LOCALHOST}`);
+  console.log(queryRef)
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [ref, setRef] = useState("");
+  const [ref, setRef] = useState(queryRef || "");
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
   const [departureDate, setDepartureDate] = useState("");
@@ -28,9 +29,16 @@ export default function Ref() {
   const [requiredDateEnd, setRequiredDateEnd] = useState();
 
   // State specifically for /ref
-  const [typedState, setTypedState] = useState("");
+  const [typedState, setTypedState] = useState(queryRef || "");
   const [cheapestFlights, setCheapestFlights] = useState([]);
   const [bestFlights, setBestFlights] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await testReference(typedState)
+    }
+    fetchData()
+  }, [])
 
   console.log(cheapestFlights);
 
@@ -423,4 +431,11 @@ export default function Ref() {
       </div>
     </Layout>
   );
+}
+
+export async function getServerSideProps(context) {
+  console.log(context.query)
+  return {
+    props: {query: context.query}
+  }
 }
