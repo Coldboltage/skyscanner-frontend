@@ -6,7 +6,11 @@ const ReferenceItem = ({ reference }) => {
   return (
     <div className={styles.inputForm}>
       <div className={styles.individualPara}>
-        <Link href={`http://localhost:3000/ref?ref=${reference}`}>{reference}</Link>
+        <Link href={`${process.env.NEXT_PUBLIC_LOCALHOST||"https://skyscannerplusweb.herokuapp.com"}/ref?ref=${reference} `}>{reference}</Link>
+        `${
+          process.env.NEXT_PUBLIC_LOCALHOST ||
+          "https://skyscannerplusweb.herokuapp.com"
+        }/api/flights/get-references-by-email/`
       </div>
     </div>
   );
