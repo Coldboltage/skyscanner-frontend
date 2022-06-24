@@ -45,7 +45,7 @@ export default function Ref() {
       const response = await fetch(
         `${
           process.env.NEXT_PUBLIC_LOCALHOST ||
-          "https://skyscannerplusweb.herokuapp.com"
+          "skyscanner-frontend.vercel.app"
         }/api/flights/get-references-by-email/`,
         {
           method: "POST",
