@@ -153,6 +153,9 @@ export default function Ref({ query: { ref: queryRef } }) {
       );
       console.log("Sent");
       console.log(response);
+      console.log("Checking response")
+      const data = await response.json()
+      console.log(data)
       if (response.ok === true) {
         toast.success("Flight found!", {
           position: "top-right",
@@ -163,7 +166,7 @@ export default function Ref({ query: { ref: queryRef } }) {
           draggable: true,
           progress: undefined,
         });
-        const data = await response.json();
+        // const data = await response.json();
         // Destructure Result
         const {
           user: { name, email },
@@ -185,7 +188,36 @@ export default function Ref({ query: { ref: queryRef } }) {
           data.latestFlights;
         setCheapestFlights(cheapestFlightsOrderMax);
         setBestFlights(bestFlightsOrderMax);
-      } else {
+      } 
+      else if (data.error = "No scan has been done yet") {
+        toast.warn(data.error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        const {
+          user: { name, email },
+          ref,
+          flights: { arrival, departure },
+          dates: { departureDate, returnDate, minimalHoliday, maximumHoliday },
+        } = data.result;
+        setName(name);
+        setEmail(email);
+        setRef(ref);
+        setArrival(arrival);
+        setDeparture(departure);
+        setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
+        setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
+        setMinimalHolday(minimalHoliday);
+        setMaximumHoliday(maximumHoliday);
+        setCheapestFlights([]);
+        setBestFlights([]);
+      }
+      else {
         console.log("Nothing was found");
         toast.error("No flight could be found with that reference", {
           position: "top-right",
