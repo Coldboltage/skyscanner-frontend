@@ -189,7 +189,7 @@ export default function Ref({ query: { ref: queryRef } }) {
         setCheapestFlights(cheapestFlightsOrderMax);
         setBestFlights(bestFlightsOrderMax);
       } 
-      else if (data.error = "No scan has been done yet") {
+      else if (data.error === "No scan has been done yet") {
         toast.warn(data.error, {
           position: "top-right",
           autoClose: 5000,
