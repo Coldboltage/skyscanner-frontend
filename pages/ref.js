@@ -19,14 +19,18 @@ export default function Ref({ query: { ref: queryRef } }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [ref, setRef] = useState(queryRef || "");
+  // Needed
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
   const [minimalHoliday, setMinimalHolday] = useState("");
   const [maximumHoliday, setMaximumHoliday] = useState("");
+  // Special
   const [requiredDateStart, setRequiredDateStart] = useState();
   const [requiredDateEnd, setRequiredDateEnd] = useState();
+  const [weekendOnly, setWeekendOnly] = useState(false);
+
 
   // State specifically for /ref
   const [typedState, setTypedState] = useState(queryRef || "");
@@ -172,8 +176,9 @@ export default function Ref({ query: { ref: queryRef } }) {
           user: { name, email },
           ref,
           flights: { arrival, departure },
-          dates: { departureDate, returnDate, minimalHoliday, maximumHoliday },
+          dates: { departureDate, returnDate, minimalHoliday, maximumHoliday, weekendOnly },
         } = data.result;
+        console.log(`What is weekendOnly: ${weekendOnly}`)
         setName(name);
         setEmail(email);
         setRef(ref);
@@ -183,6 +188,7 @@ export default function Ref({ query: { ref: queryRef } }) {
         setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
         setMinimalHolday(minimalHoliday);
         setMaximumHoliday(maximumHoliday);
+        setWeekendOnly(weekendOnly === true ? "Yes" : "No")
         // Checking latestFlight
         const { bestFlightsOrderMax, cheapestFlightsOrderMax } =
           data.latestFlights;
@@ -203,7 +209,7 @@ export default function Ref({ query: { ref: queryRef } }) {
           user: { name, email },
           ref,
           flights: { arrival, departure },
-          dates: { departureDate, returnDate, minimalHoliday, maximumHoliday },
+          dates: { departureDate, returnDate, minimalHoliday, maximumHoliday, weekendOnly },
         } = data.result;
         setName(name);
         setEmail(email);
@@ -216,6 +222,7 @@ export default function Ref({ query: { ref: queryRef } }) {
         setMaximumHoliday(maximumHoliday);
         setCheapestFlights([]);
         setBestFlights([]);
+        setWeekendOnly(weekendOnly === "true" ? "Yes" : "No")
       }
       else {
         console.log("Nothing was found");
@@ -411,6 +418,16 @@ export default function Ref({ query: { ref: queryRef } }) {
                     onChange={(e) => setRequiredDateEnd(e.target.value)}
                     type="date"
                     placeholder="return date"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="weekendOnly">Weekend Only</label>
+                  <input
+                    disabled
+                    value={`${weekendOnly}`}
+                    onChange={(e) => setWeekendOnly(e.target.value)}
+                    type="text"
+                    // placeholder="return date"
                   />
                 </div>
               </div>

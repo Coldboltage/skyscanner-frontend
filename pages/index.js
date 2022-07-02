@@ -16,14 +16,17 @@ export default function Home() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [ref, setRef] = useState("");
+  // Needed flight information
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
   const [minimalHoliday, setMinimalHolday] = useState("");
   const [maximumHoliday, setMaximumHoliday] = useState("");
+  // Special
   const [requiredDateStart, setRequiredDateStart] = useState();
   const [requiredDateEnd, setRequiredDateEnd] = useState();
+  const [weekendOnly, setWeekendOnly] = useState(false);
 
   // useEffect(() => {
   //   airportTextCheck(departure)
@@ -94,6 +97,7 @@ export default function Home() {
           maximumHoliday: maximumHoliday,
           requiredDayStart: requiredDateStartTransform,
           requiredDayEnd: requiredDateEndTransform,
+          weekendOnly: weekendOnly,
         },
         workerPID: 0,
         isBeingScanned: false,
@@ -325,6 +329,20 @@ export default function Home() {
                     type="date"
                     placeholder="return date"
                   />
+                </div>
+                <div>
+                  <label htmlFor="weekendOnly">Weekend Only</label>
+                  <select
+                    value={requiredDateEnd}
+                    // onChange={(e) => setRequiredDateEnd(e.target.value)}
+                    placeholder="return date"
+                    onChange={(e) => {
+                      e.target.value === "true" ? setWeekendOnly(true) : setWeekendOnly(false)
+                    }}
+                    >
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                  </select>
                 </div>
               </div>
             </div>
