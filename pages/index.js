@@ -15,6 +15,8 @@ export default function Home() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  // Confirm Email Address
+  const [confirmEmailAddress, confirmSetEmailAddress] = useState("");
   const [ref, setRef] = useState("");
   // Needed flight information
   const [departure, setDeparture] = useState("");
@@ -27,10 +29,13 @@ export default function Home() {
   const [requiredDateStart, setRequiredDateStart] = useState();
   const [requiredDateEnd, setRequiredDateEnd] = useState();
   const [weekendOnly, setWeekendOnly] = useState(false);
+  // Style base state
+  const [successful, setSuccessful] = useState(false);
+  const [failed, setFailed] = useState(false);
 
-  // useEffect(() => {
-  //   airportTextCheck(departure)
-  // }, departure)
+  useEffect(() => {
+    successOrFailure(confirmEmailAddress === email)
+  }, [confirmEmailAddress, email])
 
   // State for managed dates
 
@@ -180,6 +185,17 @@ export default function Home() {
     }
   };
 
+  // Style function in relation to confirm email address
+  const successOrFailure = (result) => {
+    if (result === true) {
+      setSuccessful(true);
+      setFailed(false);
+    } else {
+      setSuccessful(false);
+      setFailed(true);
+    }
+  };
+
   return (
     <Layout>
       <div className={styles.container}>
@@ -228,6 +244,21 @@ export default function Home() {
                     onChange={(e) => setEmail(e.target.value)}
                     type="email"
                     placeholder="email address"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="confirmEmail">Confirm Email</label>
+                  <input
+                    value={confirmEmailAddress}
+                    onChange={(e) => {
+                      confirmSetEmailAddress(e.target.value);
+
+                    }}
+                    onBlur={(e) => {
+                    }}
+                    type="email"
+                    placeholder="confirm email"
+                    id={`${successful === true ? "success" : "failed"}`}
                   />
                 </div>
               </div>
@@ -337,9 +368,11 @@ export default function Home() {
                     // onChange={(e) => setRequiredDateEnd(e.target.value)}
                     placeholder="return date"
                     onChange={(e) => {
-                      e.target.value === "true" ? setWeekendOnly(true) : setWeekendOnly(false)
+                      e.target.value === "true"
+                        ? setWeekendOnly(true)
+                        : setWeekendOnly(false);
                     }}
-                    >
+                  >
                     <option value="false">No</option>
                     <option value="true">Yes</option>
                   </select>

@@ -31,6 +31,14 @@ input[type="date"], select {
   cursor: pointer;
   box-sizing: border-box; }
 
+#success {
+  border: #07bc0c 2px solid;
+}
+
+#failed {
+  border: red 2px solid;
+}
+
   /* h1, h2, h3, h4, h5, h6 {
     margin: 2px
   } */
