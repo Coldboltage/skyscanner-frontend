@@ -9,14 +9,11 @@ import ShortUniqueId from "short-unique-id";
 // Component List
 import Layout from "../components/Layout";
 import AirportList from "../components/AirportList";
-import singleNameCombined from "../constant/singleNameCombined" 
+import singleNameCombined from "../constant/singleNameCombined";
 
 const uid = new ShortUniqueId({ length: 10 });
 
 export default function Home() {
-  // Console.log test
-  console.log(process.env.LOCALHOST);
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   // Confirm Email Address
@@ -25,34 +22,51 @@ export default function Home() {
   // Needed flight information
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
-  const [departureDate, setDepartureDate] = useState("");
-  const [returnDate, setReturnDate] = useState("");
-  const [minimalHoliday, setMinimalHolday] = useState("");
-  const [maximumHoliday, setMaximumHoliday] = useState("");
+  const [departureDate, setDepartureDate] = useState(
+    new Date().toISOString().slice(0, 10)
+  );
+  const [returnDate, setReturnDate] = useState(
+    new Date().toISOString().slice(0, 10)
+  );
+  const [minimalHoliday, setMinimalHolday] = useState(1);
+  const [maximumHoliday, setMaximumHoliday] = useState(1);
   // Special
-  const [requiredDateStart, setRequiredDateStart] = useState();
-  const [requiredDateEnd, setRequiredDateEnd] = useState();
+  const [requiredDateStart, setRequiredDateStart] = useState(
+    new Date().toISOString().slice(0, 10)
+  );
+  const [requiredDateEnd, setRequiredDateEnd] = useState(
+    new Date().toISOString().slice(0, 10)
+  );
   const [weekendOnly, setWeekendOnly] = useState(false);
   // Style base state
   const [successful, setSuccessful] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [departureMatch, setDepartureMatch] = useState(false)
-  const [arrivalMatch, setArrivalMatch] = useState(false)
+  const [departureMatch, setDepartureMatch] = useState(false);
+  const [arrivalMatch, setArrivalMatch] = useState(false);
 
-  const [departureAirportFiltered, setDepartureAirportFiltered] = useState([])
+  const [departureAirportFiltered, setDepartureAirportFiltered] = useState([]);
+  const [arrivalAirportFiltered, setArivalAirportFiltered] = useState([]);
 
   useEffect(() => {
     successOrFailure(confirmEmailAddress === email);
   }, [confirmEmailAddress, email]);
 
   useEffect(() => {
-    const test = singleNameCombined.some(element => element.skyscannerNameWithCode === departure)
-    const test2 = singleNameCombined.some(element => element.skyscannerNameWithCode === arrival)
-    console.log(departure)
-     test === true ? setDepartureMatch(true) : setDepartureMatch(false)
-     test2 === true ? setArrivalMatch(true) : setArrivalMatch(false)
+    const test = departureAirportFiltered.some(
+      (element) => element.skyscannerNameWithCode === departure
+    );
+    const test2 = arrivalAirportFiltered.some(
+      (element) => element.skyscannerNameWithCode === arrival
+    );
+    test === true ? setDepartureMatch(true) : setDepartureMatch(false);
+    test2 === true ? setArrivalMatch(true) : setArrivalMatch(false);
+  }, [departure, arrival, departureAirportFiltered, arrivalAirportFiltered]);
 
-  }, [departure, arrival])
+  useEffect(() => {
+    setMaximumHoliday(
+      (new Date(returnDate) - new Date(departureDate)) / 86400000
+    );
+  }, [returnDate, departureDate]);
 
   // State for managed dates
 
@@ -215,7 +229,7 @@ export default function Home() {
   };
 
   function ValidateEmail(inputText) {
-    if (inputText.length < 5) return false
+    if (inputText.length < 5) return false;
     var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     console.log(inputText);
     if (inputText.match(mailformat)) {
@@ -323,11 +337,32 @@ export default function Home() {
                       id={`${departureMatch === true && "success"}`}
                       value={departure}
                       onChange={(e) => setDeparture(e.target.value)}
+                      onBlur={(e) => {
+                        let departureChecker = [];
+                        departureAirportFiltered.forEach((element) => {
+                          if (
+                            element.skyscannerNameWithCode === e.target.value
+                          ) {
+                            console.log("this is true");
+                            departureChecker.push(true);
+                          }
+                          if (departureChecker.length === 0) {
+                            console.log("hello");
+                            setDeparture(
+                              departureAirportFiltered[0].skyscannerNameWithCode
+                            );
+                          }
+                        });
+                      }}
                       type="text"
                       placeholder="departure"
                     />
                     <div className={styles.dropdownContent}>
-                      <AirportList text={departure} state={setDeparture} setDepartureAirportFiltered={setDepartureAirportFiltered}/>
+                      <AirportList
+                        text={departure}
+                        state={setDeparture}
+                        setAirportFiltered={setDepartureAirportFiltered}
+                      />
                     </div>
                   </div>
                 </div>
@@ -339,11 +374,32 @@ export default function Home() {
                       className={styles.dropbtn}
                       value={arrival}
                       onChange={(e) => setArrival(e.target.value)}
+                      onBlur={(e) => {
+                        let departureChecker = [];
+                        arrivalAirportFiltered.forEach((element) => {
+                          if (
+                            element.skyscannerNameWithCode === e.target.value
+                          ) {
+                            console.log("this is true");
+                            departureChecker.push(true);
+                          }
+                          if (departureChecker.length === 0) {
+                            console.log("hello");
+                            setArrival(
+                              arrivalAirportFiltered[0].skyscannerNameWithCode
+                            );
+                          }
+                        });
+                      }}
                       type="text"
                       placeholder="arrival"
                     />
                     <div className={styles.dropdownContent}>
-                      <AirportList text={arrival} state={setArrival} setDepartureAirportFiltered={setDepartureAirportFiltered}/>
+                      <AirportList
+                        text={arrival}
+                        state={setArrival}
+                        setAirportFiltered={setArivalAirportFiltered}
+                      />
                     </div>
                   </div>
                 </div>
@@ -351,18 +407,30 @@ export default function Home() {
                   <label htmlFor="departureDate">Departure Date</label>
                   <input
                     value={departureDate}
-                    onChange={(e) => setDepartureDate(e.target.value)}
+                    onChange={(e) => {
+                      setDepartureDate(e.target.value);
+                      if (returnDate < departureDate) {
+                        setReturnDate(e.target.value);
+                      }
+                      setRequiredDateStart(e.target.value);
+                      setRequiredDateEnd(e.target.value);
+                    }}
                     type="date"
                     placceholder="departure date"
+                    min={new Date().toISOString().slice(0, 10)}
                   />
                 </div>
                 <div>
                   <label htmlFor="returnDate">Return Date</label>
                   <input
                     value={returnDate}
-                    onChange={(e) => setReturnDate(e.target.value)}
+                    onChange={(e) => {
+                      setReturnDate(e.target.value);
+                      setRequiredDateEnd(e.target.value);
+                    }}
                     type="date"
                     placeholder="return date"
+                    min={departureDate}
                   />
                 </div>
                 <div>
@@ -381,10 +449,21 @@ export default function Home() {
                     Maximum Holiday Duration
                   </label>
                   <input
+                    style={{ width: "200px" }}
                     value={maximumHoliday}
                     onChange={(e) => setMaximumHoliday(e.target.value)}
+                    onBlur={(e) => {
+                      e.target.value <= minimalHoliday
+                        ? setMaximumHoliday(minimalHoliday)
+                        : setMaximumHoliday(e.target.value);
+                    }}
                     type="number"
                     placeholder="maximum holiday"
+                    min={minimalHoliday}
+                    max={
+                      (new Date(returnDate) - new Date(departureDate)) /
+                      86400000
+                    }
                   />
                 </div>
               </div>
@@ -396,9 +475,16 @@ export default function Home() {
                   <label htmlFor="requiredDateBeginning">Reserved Start</label>
                   <input
                     value={requiredDateStart}
-                    onChange={(e) => setRequiredDateStart(e.target.value)}
+                    onChange={(e) => {
+                      setRequiredDateStart(e.target.value);
+                      if (requiredDateEnd < requiredDateStart) {
+                        setRequiredDateEnd(e.target.value);
+                      }
+                    }}
                     type="date"
                     placceholder="departure date"
+                    min={departureDate}
+                    max={returnDate}
                   />
                 </div>
                 <div>
@@ -408,6 +494,8 @@ export default function Home() {
                     onChange={(e) => setRequiredDateEnd(e.target.value)}
                     type="date"
                     placeholder="return date"
+                    min={requiredDateStart}
+                    max={returnDate}
                   />
                 </div>
                 <div>

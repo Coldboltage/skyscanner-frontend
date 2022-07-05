@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // import updatedCodesLocations from "../constant/updatedCodesLocations";
 import updatedCodesLocations from "../constant/singleNameCombined";
 
 
-const AirportList = ({ text, state, setDepartureAirportFiltered }) => {
+const AirportList = ({ text, state, setAirportFiltered }) => {
+  const [airportList, setAirportList] = useState([])
   // We've got text, let's do something with it
   let airportTextCheck = updatedCodesLocations.filter((element, index) => {
     // if text only has two characters, fail it
@@ -17,9 +18,12 @@ const AirportList = ({ text, state, setDepartureAirportFiltered }) => {
         .includes(text.toLowerCase()) ||
       element.location.toLowerCase().includes(text.toLowerCase())
     );
-  });
-  airportTextCheck.sort((a,b) => {return a.skyscannerNameWithCode.length - b.skyscannerNameWithCode.length})
-
+  }).sort((a,b) => {return a.skyscannerNameWithCode.length - b.skyscannerNameWithCode.length});
+  
+  useEffect(() => {
+    console.log(airportTextCheck)
+    setAirportFiltered(airportTextCheck)
+  }, [text])
   return (
     <>
       {airportTextCheck.map((airport, index) => {
