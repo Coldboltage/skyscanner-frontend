@@ -401,7 +401,7 @@ export default function Ref({ query: { ref: queryRef } }) {
               <h3>Special Information</h3>
               <div className={styles.inputCollection}>
                 <div>
-                  <label htmlFor="requiredDateBeginning">Beginning</label>
+                  <label htmlFor="requiredDateBeginning">Reserved Start</label>
                   <input
                     disabled
                     value={requiredDateStart}
@@ -411,7 +411,7 @@ export default function Ref({ query: { ref: queryRef } }) {
                   />
                 </div>
                 <div>
-                  <label htmlFor="requiredDateEnding">Ending</label>
+                  <label htmlFor="requiredDateEnding">Reserved Ending</label>
                   <input
                     disabled
                     value={requiredDateEnd}

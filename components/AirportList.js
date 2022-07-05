@@ -3,7 +3,7 @@ import { useState } from "react";
 import updatedCodesLocations from "../constant/singleNameCombined";
 
 
-const AirportList = ({ text, state }) => {
+const AirportList = ({ text, state, setDepartureAirportFiltered }) => {
   // We've got text, let's do something with it
   let airportTextCheck = updatedCodesLocations.filter((element, index) => {
     // if text only has two characters, fail it
@@ -19,10 +19,18 @@ const AirportList = ({ text, state }) => {
     );
   });
   airportTextCheck.sort((a,b) => {return a.skyscannerNameWithCode.length - b.skyscannerNameWithCode.length})
-  console.log(airportTextCheck);
+
   return (
     <>
       {airportTextCheck.map((airport, index) => {
+        // if (text === airport.skyscannerNameWithCode) {
+        //   console.log(text)
+        //   console.log(airport.skyscannerNameWithCode)
+        //   console.log("Wahoo")
+        //   setDepartureMatch(true)
+        // } else {
+        //   setDepartureMatch(false)
+        // }
         return (
           <>
             <a onClick={() => state(airport.skyscannerNameWithCode)}>

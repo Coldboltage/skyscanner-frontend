@@ -4,10 +4,14 @@ import styles from "../styles/Home.module.css";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ShortUniqueId from "short-unique-id";
 
 // Component List
 import Layout from "../components/Layout";
 import AirportList from "../components/AirportList";
+import singleNameCombined from "../constant/singleNameCombined" 
+
+const uid = new ShortUniqueId({ length: 10 });
 
 export default function Home() {
   // Console.log test
@@ -17,7 +21,7 @@ export default function Home() {
   const [email, setEmail] = useState("");
   // Confirm Email Address
   const [confirmEmailAddress, confirmSetEmailAddress] = useState("");
-  const [ref, setRef] = useState("");
+  const [ref, setRef] = useState(uid().toUpperCase());
   // Needed flight information
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
@@ -32,10 +36,23 @@ export default function Home() {
   // Style base state
   const [successful, setSuccessful] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [departureMatch, setDepartureMatch] = useState(false)
+  const [arrivalMatch, setArrivalMatch] = useState(false)
+
+  const [departureAirportFiltered, setDepartureAirportFiltered] = useState([])
 
   useEffect(() => {
-    successOrFailure(confirmEmailAddress === email)
-  }, [confirmEmailAddress, email])
+    successOrFailure(confirmEmailAddress === email);
+  }, [confirmEmailAddress, email]);
+
+  useEffect(() => {
+    const test = singleNameCombined.some(element => element.skyscannerNameWithCode === departure)
+    const test2 = singleNameCombined.some(element => element.skyscannerNameWithCode === arrival)
+    console.log(departure)
+     test === true ? setDepartureMatch(true) : setDepartureMatch(false)
+     test2 === true ? setArrivalMatch(true) : setArrivalMatch(false)
+
+  }, [departure, arrival])
 
   // State for managed dates
 
@@ -82,7 +99,8 @@ export default function Home() {
       returnDateeTransform > departureDateTransform &&
       name.length > 0 &&
       ref.length > 0 &&
-      email.length > 0
+      email.length > 0 &&
+      email === confirmEmailAddress
     ) {
       console.log("Validation successful");
       const payload = {
@@ -196,6 +214,35 @@ export default function Home() {
     }
   };
 
+  function ValidateEmail(inputText) {
+    if (inputText.length < 5) return false
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    console.log(inputText);
+    if (inputText.match(mailformat)) {
+      toast.info("Valid Email Address", {
+        position: "top-right",
+        autoClose: 1250,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return true;
+    } else {
+      toast.error("Invalid Email Address", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return false;
+    }
+  }
+
   return (
     <Layout>
       <div className={styles.container}>
@@ -231,6 +278,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="reference">Reference</label>
                   <input
+                    disabled
                     value={ref}
                     onChange={(e) => setRef(e.target.value)}
                     type="text"
@@ -242,6 +290,7 @@ export default function Home() {
                   <input
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    onBlur={(e) => ValidateEmail(e.target.value)}
                     type="email"
                     placeholder="email address"
                   />
@@ -252,10 +301,8 @@ export default function Home() {
                     value={confirmEmailAddress}
                     onChange={(e) => {
                       confirmSetEmailAddress(e.target.value);
-
                     }}
-                    onBlur={(e) => {
-                    }}
+                    onBlur={(e) => {}}
                     type="email"
                     placeholder="confirm email"
                     id={`${successful === true ? "success" : "failed"}`}
@@ -273,13 +320,14 @@ export default function Home() {
                   <div className={styles.dropdown}>
                     <input
                       className={styles.dropbtn}
+                      id={`${departureMatch === true && "success"}`}
                       value={departure}
                       onChange={(e) => setDeparture(e.target.value)}
                       type="text"
                       placeholder="departure"
                     />
                     <div className={styles.dropdownContent}>
-                      <AirportList text={departure} state={setDeparture} />
+                      <AirportList text={departure} state={setDeparture} setDepartureAirportFiltered={setDepartureAirportFiltered}/>
                     </div>
                   </div>
                 </div>
@@ -287,6 +335,7 @@ export default function Home() {
                   <label htmlFor="arrival">Arrival</label>
                   <div className={styles.dropdown}>
                     <input
+                      id={`${arrivalMatch === true && "success"}`}
                       className={styles.dropbtn}
                       value={arrival}
                       onChange={(e) => setArrival(e.target.value)}
@@ -294,7 +343,7 @@ export default function Home() {
                       placeholder="arrival"
                     />
                     <div className={styles.dropdownContent}>
-                      <AirportList text={arrival} state={setArrival} />
+                      <AirportList text={arrival} state={setArrival} setDepartureAirportFiltered={setDepartureAirportFiltered}/>
                     </div>
                   </div>
                 </div>
@@ -344,7 +393,7 @@ export default function Home() {
               <h3>Special Information</h3>
               <div className={styles.inputCollection}>
                 <div>
-                  <label htmlFor="requiredDateBeginning">Beginning</label>
+                  <label htmlFor="requiredDateBeginning">Reserved Start</label>
                   <input
                     value={requiredDateStart}
                     onChange={(e) => setRequiredDateStart(e.target.value)}
@@ -353,7 +402,7 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="requiredDateEnding">Ending</label>
+                  <label htmlFor="requiredDateEnding">Reserved End</label>
                   <input
                     value={requiredDateEnd}
                     onChange={(e) => setRequiredDateEnd(e.target.value)}
