@@ -22,12 +22,12 @@ export default function Home() {
   // Needed flight information
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
-  const [departureDate, setDepartureDate] = useState(
-    new Date().toISOString().slice(0, 10)
-  );
-  const [returnDate, setReturnDate] = useState(
-    new Date().toISOString().slice(0, 10)
-  );
+  const [departureDate, setDepartureDate] =
+    useState();
+    // new Date().toISOString().slice(0, 10)
+  const [returnDate, setReturnDate] =
+    useState();
+    // new Date().toISOString().slice(0, 10)
   const [minimalHoliday, setMinimalHolday] = useState(1);
   const [maximumHoliday, setMaximumHoliday] = useState(1);
   // Special
@@ -63,16 +63,13 @@ export default function Home() {
   }, [departure, arrival, departureAirportFiltered, arrivalAirportFiltered]);
 
   useEffect(() => {
-    setMaximumHoliday(
-      (new Date(returnDate) - new Date(departureDate)) / 86400000
-    );
+    if ((( (new Date(returnDate) - new Date(departureDate)) / 86400000) < maximumHoliday) || (((new Date(returnDate) - new Date(departureDate)) / 86400000) < 1)) {
+      setMaximumHoliday(
+        (new Date(returnDate) - new Date(departureDate)) / 86400000
+      );
+
+    }
   }, [returnDate, departureDate]);
-
-  useEffect(() => {
-    console.log("What is departure: " + departure )
-  }, [departure])
-
-  
 
   // State for managed dates
 
@@ -120,7 +117,10 @@ export default function Home() {
       name.length > 0 &&
       ref.length > 0 &&
       email.length > 0 &&
-      email === confirmEmailAddress
+      email === confirmEmailAddress &&
+      returnDate > departureDate &&
+      maximumHoliday >= minimalHoliday
+
     ) {
       console.log("Validation successful");
       const payload = {
@@ -343,22 +343,29 @@ export default function Home() {
                       id={`${departureMatch === true && "success"}`}
                       value={departure}
                       onChange={(e) => setDeparture(e.target.value)}
-                      onfocusout={(e) => {
+                      onBlur={(e) => {
                         let departureChecker = [];
-                        departureAirportFiltered.forEach((element) => {
-                          console.log(`What is departure: ${departure}`)
-                    
-                          if (
-                            element.skyscannerNameWithCode === departure
-                          ) {
-                            console.log("this is true");
+                        for (let element of departureAirportFiltered) {
+                          console.log("On blur started");
+                          console.log(`What is departure: ${departure}`);
+                          console.log(
+                            `Comparison checker = ${element.skyscannerNameWithCode} - ${departure}`
+                          );
+                          if (element.skyscannerNameWithCode === departure) {
+                            console;
                             departureChecker.push(true);
                           }
-                          console.log(departureChecker)
-                          console.log(`is departureChecker.length > 0 = ${departureChecker.length > 0}`)
-                        });
+                          console.log(departureChecker);
+                          console.log(
+                            `is departureChecker.length > 0 = ${
+                              departureChecker.length > 0
+                            }`
+                          );
+                        }
+                        console.log(departureChecker.length === 0);
                         if (departureChecker.length === 0) {
                           console.log("hello first thing added");
+                          console.log("Now what is departure: " + departure);
                           setDeparture(
                             departureAirportFiltered[0].skyscannerNameWithCode
                           );
@@ -384,22 +391,33 @@ export default function Home() {
                       className={styles.dropbtn}
                       value={arrival}
                       onChange={(e) => setArrival(e.target.value)}
-                      onfocusout={(e) => {
+                      onBlur={(e) => {
                         let departureChecker = [];
-                        arrivalAirportFiltered.forEach((element) => {
-                          if (
-                            element.skyscannerNameWithCode === e.target.value
-                          ) {
-                            console.log("this is true");
+                        for (let element of arrivalAirportFiltered) {
+                          console.log("On blur started");
+                          console.log(`What is departure: ${departure}`);
+                          console.log(
+                            `Comparison checker = ${element.skyscannerNameWithCode} - ${departure}`
+                          );
+                          if (element.skyscannerNameWithCode === departure) {
+                            console;
                             departureChecker.push(true);
                           }
-                          if (departureChecker.length === 0) {
-                            console.log("hello");
-                            setArrival(
-                              arrivalAirportFiltered[0].skyscannerNameWithCode
-                            );
-                          }
-                        });
+                          console.log(departureChecker);
+                          console.log(
+                            `is departureChecker.length > 0 = ${
+                              departureChecker.length > 0
+                            }`
+                          );
+                        }
+                        console.log(departureChecker.length === 0);
+                        if (departureChecker.length === 0) {
+                          console.log("hello first thing added");
+                          console.log("Now what is departure: " + departure);
+                          setDeparture(
+                            departureAirportFiltered[0].skyscannerNameWithCode
+                          );
+                        }
                       }}
                       type="text"
                       placeholder="arrival"
@@ -428,6 +446,7 @@ export default function Home() {
                     type="date"
                     placceholder="departure date"
                     min={new Date().toISOString().slice(0, 10)}
+                    // max={returnDate}
                   />
                 </div>
                 <div>
@@ -450,6 +469,19 @@ export default function Home() {
                   <input
                     value={minimalHoliday}
                     onChange={(e) => setMinimalHolday(e.target.value)}
+                    onBlur={(e) => {
+                      if (
+                        +e.target.value >
+                        (new Date(returnDate) - new Date(departureDate)) /
+                          86400000
+                      ) {
+                        console.log("LOOK HERE ALAN");
+                        setMinimalHolday(
+                          (new Date(returnDate) - new Date(departureDate)) /
+                            86400000
+                        );
+                      }
+                    }}
                     type="number"
                     placeholder="minimal holiday"
                   />
@@ -463,9 +495,20 @@ export default function Home() {
                     value={maximumHoliday}
                     onChange={(e) => setMaximumHoliday(e.target.value)}
                     onBlur={(e) => {
-                      e.target.value <= minimalHoliday
+                      +e.target.value <= minimalHoliday
                         ? setMaximumHoliday(minimalHoliday)
                         : setMaximumHoliday(e.target.value);
+                      if (
+                        +e.target.value >
+                        (new Date(returnDate) - new Date(departureDate)) /
+                          86400000
+                      ) {
+                        console.log("LOOK HERE ALAN");
+                        setMaximumHoliday(
+                          (new Date(returnDate) - new Date(departureDate)) /
+                            86400000
+                        );
+                      }
                     }}
                     type="number"
                     placeholder="maximum holiday"
@@ -488,13 +531,13 @@ export default function Home() {
                     onChange={(e) => {
                       setRequiredDateStart(e.target.value);
                       if (requiredDateEnd < requiredDateStart) {
-                        setRequiredDateEnd(e.target.value);
+                        setRequiredDateEnd(requiredDateStart);
                       }
                     }}
                     type="date"
                     placceholder="departure date"
                     min={departureDate}
-                    max={returnDate}
+                    // max={requiredDateEnd}
                   />
                 </div>
                 <div>

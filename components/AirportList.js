@@ -37,7 +37,10 @@ const AirportList = ({ text, state, setAirportFiltered }) => {
         // }
         return (
           <>
-            <a onClick={() => state(airport.skyscannerNameWithCode)}>
+            <a onMouseDown={() =>{
+               state(airport.skyscannerNameWithCode)
+               console.log(airport.skyscannerNameWithCode)
+            }}>
               {airport.skyscannerNameWithCode}
             </a>
           </>
