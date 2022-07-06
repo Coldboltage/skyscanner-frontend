@@ -68,6 +68,12 @@ export default function Home() {
     );
   }, [returnDate, departureDate]);
 
+  useEffect(() => {
+    console.log("What is departure: " + departure )
+  }, [departure])
+
+  
+
   // State for managed dates
 
   // Form outputs strings so we need to transform the data properly
@@ -337,22 +343,26 @@ export default function Home() {
                       id={`${departureMatch === true && "success"}`}
                       value={departure}
                       onChange={(e) => setDeparture(e.target.value)}
-                      onBlur={(e) => {
+                      onfocusout={(e) => {
                         let departureChecker = [];
                         departureAirportFiltered.forEach((element) => {
+                          console.log(`What is departure: ${departure}`)
+                    
                           if (
-                            element.skyscannerNameWithCode === e.target.value
+                            element.skyscannerNameWithCode === departure
                           ) {
                             console.log("this is true");
                             departureChecker.push(true);
                           }
-                          if (departureChecker.length === 0) {
-                            console.log("hello");
-                            setDeparture(
-                              departureAirportFiltered[0].skyscannerNameWithCode
-                            );
-                          }
+                          console.log(departureChecker)
+                          console.log(`is departureChecker.length > 0 = ${departureChecker.length > 0}`)
                         });
+                        if (departureChecker.length === 0) {
+                          console.log("hello first thing added");
+                          setDeparture(
+                            departureAirportFiltered[0].skyscannerNameWithCode
+                          );
+                        }
                       }}
                       type="text"
                       placeholder="departure"
@@ -374,7 +384,7 @@ export default function Home() {
                       className={styles.dropbtn}
                       value={arrival}
                       onChange={(e) => setArrival(e.target.value)}
-                      onBlur={(e) => {
+                      onfocusout={(e) => {
                         let departureChecker = [];
                         arrivalAirportFiltered.forEach((element) => {
                           if (
