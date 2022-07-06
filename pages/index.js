@@ -392,30 +392,30 @@ export default function Home() {
                       value={arrival}
                       onChange={(e) => setArrival(e.target.value)}
                       onBlur={(e) => {
-                        let departureChecker = [];
+                        let arrivalChecker = [];
                         for (let element of arrivalAirportFiltered) {
                           console.log("On blur started");
-                          console.log(`What is departure: ${departure}`);
+                          console.log(`What is departure: ${arrival}`);
                           console.log(
-                            `Comparison checker = ${element.skyscannerNameWithCode} - ${departure}`
+                            `Comparison checker = ${element.skyscannerNameWithCode} - ${arrival}`
                           );
-                          if (element.skyscannerNameWithCode === departure) {
+                          if (element.skyscannerNameWithCode === arrival) {
                             console;
-                            departureChecker.push(true);
+                            arrivalChecker.push(true);
                           }
-                          console.log(departureChecker);
+                          console.log(arrivalChecker);
                           console.log(
                             `is departureChecker.length > 0 = ${
-                              departureChecker.length > 0
+                              arrivalChecker.length > 0
                             }`
                           );
                         }
-                        console.log(departureChecker.length === 0);
-                        if (departureChecker.length === 0) {
+                        // console.log(departureChecker.length === 0);
+                        if (arrivalChecker.length === 0) {
                           console.log("hello first thing added");
                           console.log("Now what is departure: " + departure);
-                          setDeparture(
-                            departureAirportFiltered[0].skyscannerNameWithCode
+                          setArrival(
+                            arrivalAirportFiltered[0].skyscannerNameWithCode
                           );
                         }
                       }}
