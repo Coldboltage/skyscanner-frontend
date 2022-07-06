@@ -31,11 +31,13 @@ export default function Ref({ query: { ref: queryRef } }) {
   const [requiredDateEnd, setRequiredDateEnd] = useState();
   const [weekendOnly, setWeekendOnly] = useState(false);
 
-
   // State specifically for /ref
   const [typedState, setTypedState] = useState(queryRef || "");
   const [cheapestFlights, setCheapestFlights] = useState([]);
   const [bestFlights, setBestFlights] = useState([]);
+
+  const [departureAirportFiltered, setDepartureAirportFiltered] = useState([]);
+  const [arrivalAirportFiltered, setArivalAirportFiltered] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -157,9 +159,9 @@ export default function Ref({ query: { ref: queryRef } }) {
       );
       console.log("Sent");
       console.log(response);
-      console.log("Checking response")
-      const data = await response.json()
-      console.log(data)
+      console.log("Checking response");
+      const data = await response.json();
+      console.log(data);
       if (response.ok === true) {
         toast.success("Flight found!", {
           position: "top-right",
@@ -176,9 +178,15 @@ export default function Ref({ query: { ref: queryRef } }) {
           user: { name, email },
           ref,
           flights: { arrival, departure },
-          dates: { departureDate, returnDate, minimalHoliday, maximumHoliday, weekendOnly },
+          dates: {
+            departureDate,
+            returnDate,
+            minimalHoliday,
+            maximumHoliday,
+            weekendOnly,
+          },
         } = data.result;
-        console.log(`What is weekendOnly: ${weekendOnly}`)
+        console.log(`What is weekendOnly: ${weekendOnly}`);
         setName(name);
         setEmail(email);
         setRef(ref);
@@ -188,14 +196,13 @@ export default function Ref({ query: { ref: queryRef } }) {
         setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
         setMinimalHolday(minimalHoliday);
         setMaximumHoliday(maximumHoliday);
-        setWeekendOnly(weekendOnly === true ? "Yes" : "No")
+        setWeekendOnly(weekendOnly === true ? "Yes" : "No");
         // Checking latestFlight
         const { bestFlightsOrderMax, cheapestFlightsOrderMax } =
           data.latestFlights;
         setCheapestFlights(cheapestFlightsOrderMax);
         setBestFlights(bestFlightsOrderMax);
-      } 
-      else if (data.error === "No scan has been done yet") {
+      } else if (data.error === "No scan has been done yet") {
         toast.warn(data.error, {
           position: "top-right",
           autoClose: 5000,
@@ -209,7 +216,13 @@ export default function Ref({ query: { ref: queryRef } }) {
           user: { name, email },
           ref,
           flights: { arrival, departure },
-          dates: { departureDate, returnDate, minimalHoliday, maximumHoliday, weekendOnly },
+          dates: {
+            departureDate,
+            returnDate,
+            minimalHoliday,
+            maximumHoliday,
+            weekendOnly,
+          },
         } = data.result;
         setName(name);
         setEmail(email);
@@ -222,9 +235,8 @@ export default function Ref({ query: { ref: queryRef } }) {
         setMaximumHoliday(maximumHoliday);
         setCheapestFlights([]);
         setBestFlights([]);
-        setWeekendOnly(weekendOnly === "true" ? "Yes" : "No")
-      }
-      else {
+        setWeekendOnly(weekendOnly === "true" ? "Yes" : "No");
+      } else {
         console.log("Nothing was found");
         toast.error("No flight could be found with that reference", {
           position: "top-right",
@@ -331,7 +343,11 @@ export default function Ref({ query: { ref: queryRef } }) {
                       placeholder="departure"
                     />
                     <div className={styles.dropdownContent}>
-                      <AirportList text={departure} state={setDeparture} />
+                      <AirportList
+                        text={departure}
+                        state={setDeparture}
+                        setAirportFiltered={setDepartureAirportFiltered}
+                      />{" "}
                     </div>
                   </div>
                 </div>
@@ -347,7 +363,11 @@ export default function Ref({ query: { ref: queryRef } }) {
                       placeholder="arrival"
                     />
                     <div className={styles.dropdownContent}>
-                      <AirportList text={arrival} state={setArrival} />
+                      <AirportList
+                        text={arrival}
+                        state={setArrival}
+                        setAirportFiltered={setArivalAirportFiltered}
+                      />{" "}
                     </div>
                   </div>
                 </div>
