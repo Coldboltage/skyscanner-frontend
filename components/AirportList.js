@@ -12,11 +12,12 @@ const AirportList = ({ text, state, setAirportFiltered }) => {
       return false;
     }
     // Easy. Check if the airport name in skyscannerNameWithCode
+
     return (
       element.skyscannerNameWithCode
         .toLowerCase()
         .includes(text.toLowerCase()) 
-        // || element.location.toLowerCase().includes(text.toLowerCase())
+        // || element.location.toLowerCase().includes(text.toLowerCase()) 
     );
   }).sort((a,b) => {return a.skyscannerNameWithCode.length - b.skyscannerNameWithCode.length});
   

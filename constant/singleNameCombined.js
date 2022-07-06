@@ -4202,6 +4202,11 @@ module.exports = [
     skyscannerNameWithCode: "Devonport (DPO)",
   },
   {
+    code: "DPS",
+    location: "Denpasar (Bali), Indonesia",
+    skyscannerNameWithCode: "Bali (Denpasar) (DPS)",
+  },
+  {
     code: "DPT",
     location: "Deputatsky, Yakutia, Russia",
     skyscannerNameWithCode: "Deputatsky (DPT)",
@@ -10512,6 +10517,11 @@ module.exports = [
     code: "MFU",
     location: "Mfuwe, Zambia",
     skyscannerNameWithCode: "Mfuwe (MFU)",
+  },
+  {
+    code: "MG",
+    location: "Madagascar",
+    skyscannerNameWithCode: "Madagascar (MG)",
   },
   {
     code: "MGA",

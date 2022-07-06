@@ -4200,6 +4200,10 @@ module.exports = [
     skyscannerNameWithCode: "Devonport (DPO)"
   },
   {
+    code: "DPS",
+    skyscannerNameWithCode: "Bali (Denpasar) (DPS)"
+  },
+  {
     code: "DPT",
     location: "Deputatsky, Yakutia, Russia",
     skyscannerNameWithCode: "Deputatsky (DPT)"
