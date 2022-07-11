@@ -372,7 +372,7 @@ export default function Ref({ query: { ref: queryRef } }) {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="departureDate">Departure Date</label>
+                  <label htmlFor="departureDate">Earliest Departure Date</label>
                   <input
                     disabled
                     value={departureDate}
@@ -382,7 +382,7 @@ export default function Ref({ query: { ref: queryRef } }) {
                   />
                 </div>
                 <div>
-                  <label htmlFor="returnDate">Return Date</label>
+                  <label htmlFor="returnDate">Latest Return Date</label>
                   <input
                     disabled
                     value={returnDate}

@@ -27,7 +27,7 @@ const cheapestFlightsItem = ({ flight, bestOrCheapest }) => {
       <div className={styles.individualPara}>
         <a href={url} className={`${styles.individualPara} ${styles.link}`}>
           <span className={styles.titleItem}>Skyscanner Link</span>:{` `}
-          <a href={url}>Flight Link</a>
+          <a href={url} target="_blank" rel="noopener noreferrer">Flight Link</a>
         </a>
       </div>
     </div>

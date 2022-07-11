@@ -432,7 +432,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="departureDate">Departure Date</label>
+                  <label htmlFor="departureDate">Earliest Departure Date</label>
                   <input
                     value={departureDate}
                     onChange={(e) => {
@@ -450,7 +450,7 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="returnDate">Return Date</label>
+                  <label htmlFor="returnDate">Latest Return Date</label>
                   <input
                     value={returnDate}
                     onChange={(e) => {
