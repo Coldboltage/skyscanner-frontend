@@ -404,7 +404,7 @@ export default function Home() {
                       onClick={(e) => {
                         if (Mobile()) {
                           console.log(Mobile())
-                          e.target.scrollIntoView({behavior: "smooth", block: "start", inline: "start"})
+                          e.target.scrollIntoView(true)
                         }
                       }}
                       onChange={(e) => setArrival(e.target.value)}
