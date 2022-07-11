@@ -347,7 +347,7 @@ export default function Home() {
                       onClick={(e) => {
                         if (Mobile()) {
                           console.log(Mobile())
-                          e.target.scrollIntoView(alignToTop)
+                          e.target.scrollIntoView({behavior: "smooth", block: "start", inline: "start"})
                         }
                       }}
                       onChange={(e) => setDeparture(e.target.value)}
@@ -403,7 +403,7 @@ export default function Home() {
                       onClick={(e) => {
                         if (Mobile()) {
                           console.log(Mobile())
-                          e.target.scrollIntoView(alignToTop)
+                          e.target.scrollIntoView({behavior: "smooth", block: "start", inline: "start"})
                         }
                       }}
                       onChange={(e) => setArrival(e.target.value)}
