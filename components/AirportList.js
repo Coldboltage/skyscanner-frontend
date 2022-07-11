@@ -17,7 +17,7 @@ const AirportList = ({ text, state, setAirportFiltered }) => {
       element.skyscannerNameWithCode
         .toLowerCase()
         .includes(text.toLowerCase()) 
-        // || element.location.toLowerCase().includes(text.toLowerCase()) 
+        || element.location.toLowerCase().includes(text.toLowerCase()) 
     );
   }).sort((a,b) => {return a.skyscannerNameWithCode.length - b.skyscannerNameWithCode.length});
   
