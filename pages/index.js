@@ -346,9 +346,9 @@ export default function Home() {
                       value={departure}
                       onClick={(e) => {
                         if (Mobile()) {
-                          alert("Mobile detected")
+                          // alert("Mobile detected")
                           console.log(Mobile())
-                          e.target.scrollIntoView({behavior: "smooth", block: "start", inline: "start"})
+                          e.target.scrollIntoView(true)
                         }
                       }}
                       onChange={(e) => setDeparture(e.target.value)}
