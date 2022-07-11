@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShortUniqueId from "short-unique-id";
+import Mobile from "is-mobile"
 
 // Component List
 import Layout from "../components/Layout";
@@ -343,6 +344,12 @@ export default function Home() {
                       className={styles.dropbtn}
                       id={`${departureMatch === true && "success"}`}
                       value={departure}
+                      onClick={(e) => {
+                        if (Mobile()) {
+                          console.log(Mobile())
+                          e.target.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"})
+                        }
+                      }}
                       onChange={(e) => setDeparture(e.target.value)}
                       onBlur={(e) => {
                         if (e.target.value.length > 2) {
@@ -393,6 +400,12 @@ export default function Home() {
                       id={`${arrivalMatch === true && "success"}`}
                       className={styles.dropbtn}
                       value={arrival}
+                      onClick={(e) => {
+                        if (Mobile()) {
+                          console.log(Mobile())
+                          e.target.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"})
+                        }
+                      }}
                       onChange={(e) => setArrival(e.target.value)}
                       onBlur={(e) => {
                         if (e.target.value.length > 2) {
