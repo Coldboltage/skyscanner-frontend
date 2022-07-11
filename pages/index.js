@@ -337,7 +337,7 @@ export default function Home() {
               <div className={styles.inputCollection}>
                 <div>
                   {" "}
-                  <label htmlFor="departure">Departure</label>
+                  <label id="departureInput" htmlFor="departure">Departure</label>
                   {/* Departure Dropdown */}
                   <div className={styles.dropdown}>
                     <input
@@ -348,7 +348,7 @@ export default function Home() {
                         if (Mobile()) {
                           // alert("Mobile detected")
                           console.log(Mobile())
-                          e.target.scrollIntoView(true)
+                          e.target.parentNode.previousSibling.scrollIntoView(true)
                         }
                       }}
                       onChange={(e) => setDeparture(e.target.value)}
@@ -404,7 +404,7 @@ export default function Home() {
                       onClick={(e) => {
                         if (Mobile()) {
                           console.log(Mobile())
-                          e.target.scrollIntoView(true)
+                          document.getElementById("departureInput").scrollIntoView(true)
                         }
                       }}
                       onChange={(e) => setArrival(e.target.value)}
