@@ -31,10 +31,10 @@ export default function Home() {
   const [maximumHolidayPrevious, setMaximumHolidayPrevious] = useState();
   // Special
   const [requiredDateStart, setRequiredDateStart] = useState(
-    new Date().toISOString().slice(0, 10)
+    
   );
   const [requiredDateEnd, setRequiredDateEnd] = useState(
-    new Date().toISOString().slice(0, 10)
+    
   );
   const [weekendOnly, setWeekendOnly] = useState(false);
   // Style base state
@@ -446,8 +446,8 @@ export default function Home() {
                       if (returnDate < departureDate) {
                         setReturnDate(e.target.value);
                       }
-                      setRequiredDateStart(e.target.value);
-                      setRequiredDateEnd(e.target.value);
+                      // setRequiredDateStart(e.target.value);
+                      // setRequiredDateEnd(e.target.value);
                     }}
                     type="date"
                     placceholder="departure date"
@@ -462,7 +462,7 @@ export default function Home() {
                     value={returnDate}
                     onChange={(e) => {
                       setReturnDate(e.target.value);
-                      setRequiredDateEnd(e.target.value);
+                      // setRequiredDateEnd(e.target.value);
                     }}
                     type="date"
                     placeholder="return date"
