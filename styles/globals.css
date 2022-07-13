@@ -39,6 +39,12 @@ input[type="date"], select {
   border: red 2px solid;
 }
 
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
   /* h1, h2, h3, h4, h5, h6 {
     margin: 2px
   } */

@@ -1,13 +1,21 @@
 import "../styles/globals.css";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import { FpjsProvider } from "@fingerprintjs/fingerprintjs-pro-react";
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      {" "}
-      <Component {...pageProps} />
-      <ToastContainer />
+      <FpjsProvider
+        loadOptions={{
+          apiKey: "zJ53glDHCt2SApDfUYCc",
+          region: "eu",
+        }}
+      >
+        {" "}
+        <Component {...pageProps} />
+        <ToastContainer />
+      </FpjsProvider>
     </>
   );
 }

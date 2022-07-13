@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShortUniqueId from "short-unique-id";
-import Mobile from "is-mobile"
+import Mobile from "is-mobile";
+import { useVisitorData } from '@fingerprintjs/fingerprintjs-pro-react'
 
 // Component List
 import Layout from "../components/Layout";
@@ -31,12 +32,8 @@ export default function Home() {
   const [minimalHolidayPrevious, setMinimalHolidayPrevious] = useState();
   const [maximumHolidayPrevious, setMaximumHolidayPrevious] = useState();
   // Special
-  const [requiredDateStart, setRequiredDateStart] = useState(
-    
-  );
-  const [requiredDateEnd, setRequiredDateEnd] = useState(
-    
-  );
+  const [requiredDateStart, setRequiredDateStart] = useState();
+  const [requiredDateEnd, setRequiredDateEnd] = useState();
   const [weekendOnly, setWeekendOnly] = useState(false);
   // Style base state
   const [successful, setSuccessful] = useState(false);
@@ -47,8 +44,33 @@ export default function Home() {
   const [departureAirportFiltered, setDepartureAirportFiltered] = useState([]);
   const [arrivalAirportFiltered, setArivalAirportFiltered] = useState([]);
 
+  const {data} = useVisitorData();
+  console.log(data)
+
   useEffect(() => {
     successOrFailure(confirmEmailAddress === email);
+
+    // if (confirmEmailAddress === email && email.length > 4) {
+    //   const fetchData = async (email) => {
+    //     console.log(email);
+    //     const response = await fetch(
+    //       `${
+    //         process.env.NEXT_PUBLIC_LOCALHOST ||
+    //         "https://skyscannerplusweb.herokuapp.com"
+    //       }/api/users/check-email-address/`,
+    //       {
+    //         method: "POST",
+    //         cors: "no-cors",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({ email: email }),
+    //       }
+    //     );
+    //     const data = await response.json();
+    //     return data
+    //   };
+    // }
   }, [confirmEmailAddress, email]);
 
   useEffect(() => {
@@ -73,6 +95,10 @@ export default function Home() {
       );
     }
   }, [returnDate, departureDate]);
+
+  // useEffect(() => {
+
+  // }, [confirmEmailAddress, email]);
 
   // State for managed dates
 
@@ -99,7 +125,7 @@ export default function Home() {
   };
 
   // Makes sure the code is set correctly for API consumption
-  const formValidation = ({
+  const formValidation = async ({
     departureDateTransform,
     returnDateeTransform,
     minimalHolidayTransform,
@@ -111,6 +137,11 @@ export default function Home() {
     // 1) Max Holiday needs to be greater than or equal to minimal holiday
     // 2) Return Date needs to be greater than or equal to departure date
     // 3) RequiredDateEnd needs to be greater than or equal to RequiredDateStart
+    // const emailChecker = await fetch(
+    //   `${
+    //     process.env.NEXT_PUBLIC_LOCALHOST || "https://skyscannerplusweb.herokuapp.com"
+    //   }/api/users/check-email-address/`
+    // );
     if (
       maximumHolidayTransform >= minimalHolidayTransform &&
       (requiredDateEndTransform > requiredDateStartTransform ||
@@ -158,9 +189,33 @@ export default function Home() {
         delete payload.dates.requiredDayEnd;
         console.log(`Changes have been made`);
       }
-      console.log(payload);
-      // Payload is ready
-      return { payload, status: true };
+      // Do we have localStorage with ref. This means at least 1
+      if (JSON.parse(localStorage.getItem("ref"))) {
+        console.log(JSON.parse(localStorage.getItem("ref")));
+        const localRef = JSON.parse(localStorage.getItem("ref"))
+        // Is it exactly 1?
+        if (localRef.length === 1) {
+          // Make sure we aren't resubmitting the same flight
+          if (localRef[0] === ref) {
+            console.log("No need to add the same flight")
+            return { status: false };
+          } else {
+            localRef.push(ref)
+            console.log(localRef)
+            localStorage.setItem("ref", JSON.stringify(localRef))
+            return { payload, status: true };
+          }
+        } else {
+          console.log("You already have two flights")
+          return { status: false };
+        }
+      } else {
+        localStorage.setItem("ref", JSON.stringify([ref]));
+        console.log(payload);
+        // Payload is ready
+        return { payload, status: true };
+      }
+      // localStorage.setItem("email", JSON.stringify(email));
     } else {
       console.log("Something is missing from the form. Please check the form");
       // toast("Please check the form", {
@@ -178,7 +233,7 @@ export default function Home() {
 
   const validateAndSend = async () => {
     const testObject = transformFormToDataTypes();
-    const { payload, status } = formValidation(testObject);
+    const { payload, status } = await formValidation(testObject);
     console.log(payload);
     if (status) {
       try {
@@ -186,7 +241,8 @@ export default function Home() {
           // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
           // "http://localhost:8001/api/users/create/",
           `${
-            process.env.LOCALHOST || "https://skyscannerplusweb.herokuapp.com"
+            process.env.NEXT_PUBLIC_LOCALHOST ||
+            "https://skyscannerplusweb.herokuapp.com"
           }/api/users/create/`,
           {
             method: "POST",
@@ -337,7 +393,9 @@ export default function Home() {
               <div className={styles.inputCollection}>
                 <div>
                   {" "}
-                  <label id="departureInput" htmlFor="departure">Departure</label>
+                  <label id="departureInput" htmlFor="departure">
+                    Departure
+                  </label>
                   {/* Departure Dropdown */}
                   <div className={styles.dropdown}>
                     <input
@@ -347,8 +405,10 @@ export default function Home() {
                       onClick={(e) => {
                         if (Mobile()) {
                           // alert("Mobile detected")
-                          console.log(Mobile())
-                          e.target.parentNode.previousSibling.scrollIntoView(true)
+                          console.log(Mobile());
+                          e.target.parentNode.previousSibling.scrollIntoView(
+                            true
+                          );
                         }
                       }}
                       onChange={(e) => setDeparture(e.target.value)}
@@ -403,8 +463,10 @@ export default function Home() {
                       value={arrival}
                       onClick={(e) => {
                         if (Mobile()) {
-                          console.log(Mobile())
-                          document.getElementById("departureInput").scrollIntoView(true)
+                          console.log(Mobile());
+                          document
+                            .getElementById("departureInput")
+                            .scrollIntoView(true);
                         }
                       }}
                       onChange={(e) => setArrival(e.target.value)}
