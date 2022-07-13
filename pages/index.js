@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShortUniqueId from "short-unique-id";
 import Mobile from "is-mobile";
-import { useVisitorData } from '@fingerprintjs/fingerprintjs-pro-react'
+import { useVisitorData } from "@fingerprintjs/fingerprintjs-pro-react";
 
 // Component List
 import Layout from "../components/Layout";
@@ -40,12 +40,14 @@ export default function Home() {
   const [failed, setFailed] = useState(false);
   const [departureMatch, setDepartureMatch] = useState(false);
   const [arrivalMatch, setArrivalMatch] = useState(false);
-
+  // Flight List stuff
   const [departureAirportFiltered, setDepartureAirportFiltered] = useState([]);
   const [arrivalAirportFiltered, setArivalAirportFiltered] = useState([]);
+  // FingerprintJS
+  const [fingerPrint, setFingerPrint] = useState("");
 
-  const {data} = useVisitorData();
-  console.log(data)
+  const { data } = useVisitorData({ immediate: false });
+  console.log(data);
 
   useEffect(() => {
     successOrFailure(confirmEmailAddress === email);
@@ -160,7 +162,9 @@ export default function Home() {
         user: {
           name: name,
           email: email,
+          fingerPrintId: data.visitorId,
         },
+        created: new Date(),
         ref: ref,
         flights: {
           departure: departure,
@@ -190,31 +194,54 @@ export default function Home() {
         console.log(`Changes have been made`);
       }
       // Do we have localStorage with ref. This means at least 1
-      if (JSON.parse(localStorage.getItem("ref"))) {
-        console.log(JSON.parse(localStorage.getItem("ref")));
-        const localRef = JSON.parse(localStorage.getItem("ref"))
-        // Is it exactly 1?
-        if (localRef.length === 1) {
-          // Make sure we aren't resubmitting the same flight
-          if (localRef[0] === ref) {
-            console.log("No need to add the same flight")
-            return { status: false };
-          } else {
-            localRef.push(ref)
-            console.log(localRef)
-            localStorage.setItem("ref", JSON.stringify(localRef))
-            return { payload, status: true };
-          }
-        } else {
-          console.log("You already have two flights")
-          return { status: false };
+      // if (JSON.parse(localStorage.getItem("ref"))) {
+      //   console.log(JSON.parse(localStorage.getItem("ref")));
+      //   const localRef = JSON.parse(localStorage.getItem("ref"))
+      //   // Is it exactly 1?
+      //   if (localRef.length === 1) {
+      //     // Make sure we aren't resubmitting the same flight
+      //     if (localRef[0] === ref) {
+      //       console.log("No need to add the same flight")
+      //       return { status: false };
+      //     } else {
+      //       localRef.push(ref)
+      //       console.log(localRef)
+      //       localStorage.setItem("ref", JSON.stringify(localRef))
+      //       return { payload, status: true };
+      //     }
+      //   } else {
+      //     console.log("You already have two flights")
+      //     return { status: false };
+      //   }
+      // } else {
+      //   localStorage.setItem("ref", JSON.stringify([ref]));
+
+      const fingerPrintResponse = await fetch(
+        // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
+        // "http://localhost:8001/api/users/create/",
+        `${
+          process.env.NEXT_PUBLIC_LOCALHOST ||
+          "https://skyscannerplusweb.herokuapp.com"
+        }/api/users/check-flight-amount-by-fingerprintid/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ fingerPrintId: data.visitorId }),
+          cors: "no-cors",
         }
-      } else {
-        localStorage.setItem("ref", JSON.stringify([ref]));
-        console.log(payload);
-        // Payload is ready
-        return { payload, status: true };
+      );
+      const fingerPrintData = await fingerPrintResponse.json();
+
+      if (fingerPrintData > 1) {
+        console.log("No more flights for today")
+        return {status: false}
       }
+      console.log(payload);
+      // Payload is ready
+      return { payload, status: true };
+      // }
       // localStorage.setItem("email", JSON.stringify(email));
     } else {
       console.log("Something is missing from the form. Please check the form");
