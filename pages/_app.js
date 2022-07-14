@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps }) {
         loadOptions={{
           apiKey: "zJ53glDHCt2SApDfUYCc",
           region: "eu",
+          endpoint: 'https://fp.skyscannerplus.com'
         }}
       >
         {" "}
