@@ -8,6 +8,7 @@ import ShortUniqueId from "short-unique-id";
 import Mobile from "is-mobile";
 import { useVisitorData } from "@fingerprintjs/fingerprintjs-pro-react";
 import { useRouter } from "next/router";
+import CurrencySelector from "../components/currencySelector";
 
 // Component List
 import Layout from "../components/Layout";
@@ -44,6 +45,10 @@ export default function Home() {
   // Flight List stuff
   const [departureAirportFiltered, setDepartureAirportFiltered] = useState([]);
   const [arrivalAirportFiltered, setArivalAirportFiltered] = useState([]);
+  const [currency, setCurrency] = useState({
+    fullCurrency: "EUR - €",
+    currencyCode: "EUR",
+  });
   // FingerprintJS
   const [fingerPrint, setFingerPrint] = useState("");
 
@@ -169,6 +174,10 @@ export default function Home() {
         },
         created: new Date(),
         ref: ref,
+        currency: {
+          fullCurrency: currency.fullCurrency || "GBP - £",
+          currencyCode: currency.currencyCode || "GBP",
+        },
         flights: {
           departure: departure,
           arrival: arrival,
@@ -335,22 +344,29 @@ export default function Home() {
         draggable: true,
         progress: undefined,
       });
-      toast.error(`Missing: 
-      ${name.length <= 0 ? "name, ": ""} 
-      ${email.length <= 0 ? "email, ": ""}
-      ${email !== confirmEmailAddress || confirmEmailAddress.length < 3 ? "confirmation email, ": ""}
-      ${!departure ? "departure, ": ""}
-      ${!arrival ? "arrival, ": ""}
-      ${!minimalHoliday ? "minimal holiday, ": ""}
-      ${!maximumHoliday ? "maximum holiday": ""}`, {
-        position: "top-right",
-        autoClose: 15000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(
+        `Missing: 
+      ${name.length <= 0 ? "name, " : ""} 
+      ${email.length <= 0 ? "email, " : ""}
+      ${
+        email !== confirmEmailAddress || confirmEmailAddress.length < 3
+          ? "confirmation email, "
+          : ""
+      }
+      ${!departure ? "departure, " : ""}
+      ${!arrival ? "arrival, " : ""}
+      ${!minimalHoliday ? "minimal holiday, " : ""}
+      ${!maximumHoliday ? "maximum holiday" : ""}`,
+        {
+          position: "top-right",
+          autoClose: 15000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
     }
   };
 
@@ -740,6 +756,10 @@ export default function Home() {
                     <option value="false">No</option>
                     <option value="true">Yes</option>
                   </select>
+                </div>
+                {/* Select */}
+                <div>
+                  <CurrencySelector setCurrency={setCurrency} />
                 </div>
               </div>
             </div>
