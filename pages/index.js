@@ -335,6 +335,22 @@ export default function Home() {
         draggable: true,
         progress: undefined,
       });
+      toast.error(`Missing: 
+      ${name.length <= 0 ? "name, ": ""} 
+      ${email.length <= 0 ? "email, ": ""}
+      ${email !== confirmEmailAddress || confirmEmailAddress.length < 3 ? "confirmation email, ": ""}
+      ${!departure ? "departure, ": ""}
+      ${!arrival ? "arrival, ": ""}
+      ${!minimalHoliday ? "minimal holiday, ": ""}
+      ${!maximumHoliday ? "maximum holiday": ""}`, {
+        position: "top-right",
+        autoClose: 15000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
