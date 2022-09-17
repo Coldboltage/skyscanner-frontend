@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ShortUniqueId from "short-unique-id";
 import Mobile from "is-mobile";
 import { useVisitorData } from "@fingerprintjs/fingerprintjs-pro-react";
+import { useRouter } from "next/router";
 
 // Component List
 import Layout from "../components/Layout";
@@ -48,6 +49,8 @@ export default function Home() {
 
   const { data } = useVisitorData({ immediate: false });
   console.log(data);
+
+  const Router = useRouter();
 
   useEffect(() => {
     successOrFailure(confirmEmailAddress === email);
@@ -155,7 +158,7 @@ export default function Home() {
       email.length > 0 &&
       email === confirmEmailAddress &&
       returnDate > departureDate &&
-      maximumHoliday >= minimalHoliday
+      +maximumHoliday >= +minimalHoliday
     ) {
       console.log("Validation successful");
       const payload = {
@@ -235,8 +238,8 @@ export default function Home() {
       const fingerPrintData = await fingerPrintResponse.json();
 
       if (fingerPrintData > 1) {
-        console.log("No more flights for today")
-        return {status: false}
+        console.log("No more flights for today");
+        return { status: false };
       }
       console.log(payload);
       // Payload is ready
@@ -244,6 +247,16 @@ export default function Home() {
       // }
       // localStorage.setItem("email", JSON.stringify(email));
     } else {
+      console.table(
+        name.length > 0,
+        ref.length > 0,
+        email.length > 0,
+        email === confirmEmailAddress,
+        returnDate > departureDate,
+        +maximumHoliday >= +minimalHoliday
+      );
+      console.log(`Maximum Holiday is: ${maximumHoliday}`);
+      console.log(`Minimal Holiday is: ${minimalHoliday}`);
       console.log("Something is missing from the form. Please check the form");
       // toast("Please check the form", {
       //   position: "top-right",
@@ -291,6 +304,23 @@ export default function Home() {
           draggable: true,
           progress: undefined,
         });
+        Router.push(
+          {
+            pathname: "/confirmation",
+            query: {
+              name,
+              ref,
+              email,
+              departure,
+              arrival,
+              departureDate,
+              returnDate,
+              minimalHoliday,
+              maximumHoliday,
+            },
+          },
+          "/confirmation"
+        );
       } catch (error) {
         console.log(error);
       }

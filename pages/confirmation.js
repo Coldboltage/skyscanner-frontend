@@ -1,10 +1,11 @@
 import Head from "next/head";
 import Image from "next/image";
-import styles from "../styles/Email.module.css";
+import styles from "../styles/Confirmation.module.css";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as dayjs from "dayjs";
+import {useRouter} from "next/router"
 
 // Component List
 import Layout from "../components/Layout";
@@ -30,6 +31,23 @@ export default function Ref() {
   // State specifically for /email
   const [typedState, setTypedState] = useState("");
   const [result, setResult] = useState([]);
+
+  const Router = useRouter()
+
+  //  Getting information from Router via index page
+  useEffect(() => {
+    setName(Router.query.name)
+    setRef(Router.query.ref)
+    setEmail(Router.query.email)
+    setDeparture(Router.query.departure)
+    setArrival(Router.query.arrival)
+    setDepartureDate(Router.query.departureDate)
+    setReturnDate(Router.query.returnDate)
+    setMinimalHolday(Router.query.minimalHoliday)
+    setMaximumHoliday(Router.query.maximumHoliday)
+    
+    name, ref, email, departure, arrival, departureDate, returnDate, minimalHoliday, maximumHoliday
+  }, [Router.query])
 
   // useEffect(() => {
   //   airportTextCheck(departure)
@@ -99,8 +117,8 @@ export default function Ref() {
         </Head>
         <div className={styles.titleDiv}>
           <h1 className={styles.title}>
-            Your flight has been added{" "}
-            <span className={styles.flight}>Email Address</span>{" "}
+            Your flight has been added: {" "}
+            <span className={styles.flight}>{ref}</span>{" "}
           </h1>
         </div>
         <main className={styles.main}>
@@ -109,39 +127,42 @@ export default function Ref() {
               <h4>Details of the flight</h4>
               <div className={styles.individualPara}>
                 <span className={styles.titleItem}>Name</span>:{` `}
-                {"Hello"} - {"Goodbye"}
+                {name}
               </div>
               <div className={styles.individualPara}>
                 <span className={styles.titleItem}>Reference</span>:{` `}
-                {"Hello"} - {"Goodbye"}
+                {ref}
               </div>
               <div className={styles.individualPara}>
                 <span className={styles.titleItem}>Email</span>:{` `}
-                {"Hello"} - {"Goodbye"}
+                {email}
               </div>
               <div className={styles.individualPara}>
                 <span className={styles.titleItem}>Departure</span>:{` `}
-                {"Hello"} - {"Goodbye"}
+                {departure}
               </div>
               <div className={styles.individualPara}>
                 <span className={styles.titleItem}>Arrival</span>:{` `}
-                {"Hello"} - {"Goodbye"}
+                {arrival}
               </div>
               <div className={styles.individualPara}>
                 <span className={styles.titleItem}>Earliest Departure Date</span>:{` `}
-                {"Hello"} - {"Goodbye"}
+                {departureDate}
               </div>
               <div className={styles.individualPara}>
                 <span className={styles.titleItem}>Latest Return Date</span>:{` `}
-                {"Hello"} - {"Goodbye"}
+                {returnDate}
               </div>
               <div className={styles.individualPara}>
                 <span className={styles.titleItem}>Minimal Holiday Duration</span>:{` `}
-                {"Hello"} - {"Goodbye"}
+                {minimalHoliday}
               </div>
               <div className={styles.individualPara}>
                 <span className={styles.titleItem}>Maximum Holiday Duration</span>:{` `}
-                {"Hello"} - {"Goodbye"}
+                {maximumHoliday}
+              </div>
+              <div className={styles.individualPara}>
+                <input className={styles.referenceButton} type="text" placeholder={`Reference: ${ref || "test"}`} onClick={() => Router.push(`/ref?ref=${ref}`)}/>
               </div>
             </div>
           </div>
