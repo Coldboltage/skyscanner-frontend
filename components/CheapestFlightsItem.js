@@ -2,7 +2,7 @@ import React from "react";
 import * as styles from "../styles/CheapestFlightsItem.module.css";
 
 const cheapestFlightsItem = ({ flight, bestOrCheapest }) => {
-  const { cost, time, arrival, durationOfFlight } = flight[bestOrCheapest];
+  const { cost, costWithCurrency, time, arrival, durationOfFlight } = flight[bestOrCheapest];
   const {
     flightDatesString: { departDate, returnDate },
     url,
@@ -10,7 +10,7 @@ const cheapestFlightsItem = ({ flight, bestOrCheapest }) => {
   return (
     <div className={styles.inputForm}>
       <div className={styles.individualPara}>
-        <span className={styles.titleItem}>Cost</span>: £{cost}
+        <span className={styles.titleItem}>Cost</span>: {costWithCurrency}
       </div>
       <div className={styles.individualPara}>
         <span className={styles.titleItem}>Dates</span>:{` `}
