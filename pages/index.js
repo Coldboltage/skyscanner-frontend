@@ -23,6 +23,7 @@ export default function Home() {
   // Confirm Email Address
   const [confirmEmailAddress, confirmSetEmailAddress] = useState("");
   const [ref, setRef] = useState(uid().toUpperCase());
+  const [returnFlight, setReturnFlight] = useState(true);
   // Needed flight information
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
@@ -474,6 +475,22 @@ export default function Home() {
                     placeholder="confirm email"
                     id={`${successful === true ? "success" : "failed"}`}
                   />
+                </div>
+                <div>
+                  <label htmlFor="returnFlight">Return/One Way</label>
+                  <select
+                    disabled
+                    value={returnFlight}
+                    // onChange={(e) => setRequiredDateEnd(e.target.value)}
+                    onChange={(e) => {
+                      e.target.value === "true"
+                        ? setReturnFlight(true)
+                        : setReturnFlight(false);
+                    }}
+                  >
+                    <option value="true">Return</option>
+                    <option value="false">One Way</option>
+                  </select>
                 </div>
               </div>
             </div>
