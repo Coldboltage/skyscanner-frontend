@@ -3,9 +3,9 @@ import currencyList from "../constant/currencyStuff";
 export default function CurrencySelector({ setCurrency }) {
   return (
     <>
-      <label for="exampleRecipientInput">Currency</label>
+      <label htmlFor="exampleRecipientInput">Currency</label>
       <select
-        class="u-full-width"
+        className="u-full-width"
         id="exampleRecipientInput"
         onChange={(e) => {
           const {  options, selectedIndex } = e.target;
@@ -17,7 +17,7 @@ export default function CurrencySelector({ setCurrency }) {
         }}
       >
         {currencyList.map((el) => {
-          return <option value={el.currencyCode}>{el.fullName}</option>;
+          return <option key={el.currencyCode} value={el.currencyCode}>{el.fullName}</option>;
         })}
       </select>
     </>
