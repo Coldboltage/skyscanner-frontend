@@ -182,6 +182,7 @@ export default function Home() {
         flights: {
           departure: departure,
           arrival: arrival,
+          returnFlight: returnFlight,
         },
         dates: {
           departureDate: departureDate,
@@ -479,7 +480,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="returnFlight">Return/One Way</label>
                   <select
-                    disabled
+                    // disabled
                     value={returnFlight}
                     // onChange={(e) => setRequiredDateEnd(e.target.value)}
                     onChange={(e) => {
@@ -656,7 +657,8 @@ export default function Home() {
                     Minimal Holiday Duration
                   </label>
                   <input
-                    value={minimalHoliday}
+                    disabled={returnFlight === true ? true : false}
+                    value={returnFlight === false ? 1 : minimalHoliday}
                     onClick={(e) => {
                       setMinimalHolidayPrevious(minimalHoliday);
                       setMinimalHolday("");
@@ -687,8 +689,9 @@ export default function Home() {
                     Maximum Holiday Duration
                   </label>
                   <input
+                    disabled={returnFlight === true ? true : false}
                     style={{ width: "200px" }}
-                    value={maximumHoliday}
+                    value={returnFlight === false ? 1 : maximumHoliday}
                     onClick={(e) => {
                       setMaximumHolidayPrevious(maximumHoliday);
                       setMaximumHoliday("");
