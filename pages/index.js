@@ -484,9 +484,14 @@ export default function Home() {
                     value={returnFlight}
                     // onChange={(e) => setRequiredDateEnd(e.target.value)}
                     onChange={(e) => {
-                      e.target.value === "true"
-                        ? setReturnFlight(true)
-                        : setReturnFlight(false);
+                      if (e.target.value === "true") {
+                        setReturnFlight(true);
+                      } else {
+                        setReturnFlight(false);
+                        setMinimalHolday(1)
+                        setMaximumHoliday(1)
+
+                      }
                     }}
                   >
                     <option value="true">Return</option>
@@ -657,7 +662,7 @@ export default function Home() {
                     Minimal Holiday Duration
                   </label>
                   <input
-                    disabled={returnFlight === true ? true : false}
+                    disabled={returnFlight === true ? false : true}
                     value={returnFlight === false ? 1 : minimalHoliday}
                     onClick={(e) => {
                       setMinimalHolidayPrevious(minimalHoliday);
@@ -689,7 +694,7 @@ export default function Home() {
                     Maximum Holiday Duration
                   </label>
                   <input
-                    disabled={returnFlight === true ? true : false}
+                    disabled={returnFlight === true ? false : true}
                     style={{ width: "200px" }}
                     value={returnFlight === false ? 1 : maximumHoliday}
                     onClick={(e) => {
