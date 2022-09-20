@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <UserProvider>
-        {/* <FpjsProvider
+        <FpjsProvider
           loadOptions={{
             apiKey: "zJ53glDHCt2SApDfUYCc",
             region: "eu",
@@ -18,8 +18,8 @@ function MyApp({ Component, pageProps }) {
           {" "}
           <Component {...pageProps} />
           <ToastContainer />
-        </FpjsProvider> */}
-        <Component {...pageProps} />
+        </FpjsProvider>
+        {/* <Component {...pageProps} /> */}
       </UserProvider>
     </>
   );

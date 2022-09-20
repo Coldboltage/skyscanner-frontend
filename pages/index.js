@@ -9,6 +9,7 @@ import Mobile from "is-mobile";
 import { useVisitorData } from "@fingerprintjs/fingerprintjs-pro-react";
 import { useRouter } from "next/router";
 import CurrencySelector from "../components/currencySelector";
+import { useUser } from '@auth0/nextjs-auth0';
 
 // Component List
 import Layout from "../components/Layout";
@@ -58,6 +59,8 @@ export default function Home() {
 
   const Router = useRouter();
 
+  // const { user, error, isLoading } = useUser();
+
   useEffect(() => {
     successOrFailure(confirmEmailAddress === email);
 
@@ -106,6 +109,10 @@ export default function Home() {
       );
     }
   }, [returnDate, departureDate]);
+
+  // useEffect(() => {
+  //   console.log(user)
+  // }, [isLoading]);
 
   // useEffect(() => {
 
