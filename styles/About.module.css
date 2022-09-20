@@ -1,0 +1,125 @@
+.container {
+  padding: 0 20px
+}
+
+.main {
+  min-height: 100vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mainContainer p {
+  font-size: 16px;
+}
+
+.title a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.title a:hover,
+.title a:focus,
+.title a:active {
+  text-decoration: underline;
+}
+
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: 4rem;
+}
+
+.title,
+.description {
+  text-align: center;
+}
+
+.titleDiv {
+  margin-top: 15px;
+  margin-bottom: 50px
+}
+
+.referenceInput {
+  margin: 30px 0 30px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.inputForm {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputCollection {
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+}
+
+.flight {
+  color: #0070f3;
+}
+
+.individualPara {
+  margin-bottom:10px;
+}
+
+.referenceButton {
+  margin-top: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* .flightsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: space-between;
+  gap: 60px
+} */
+
+/* CheapestFlighsItem */
+.titleItem {
+  font-weight: 500  ;
+}
+
+
+
+.mainContainer {
+  padding-left: 160px;
+  padding-right: 160px
+}
+
+
+@media (max-width: 1300px) {
+  .flightsContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+  .inputForm,
+  .inputCollection {
+    display: block;
+  }
+  .flightsContainer {
+    display: block;
+  }
+}
+
+/* @media all and (orientation: portrait) {
+  .inputForm,
+  .inputCollection {
+    display: block;
+  }
+} */

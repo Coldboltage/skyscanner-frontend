@@ -14,3 +14,26 @@
   align-items: center;
   flex-grow: 1;
 }
+
+.navContainer {
+  margin-top: 60px;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+.nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  border-top: 1px rgb(209, 209, 209) solid;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.navLink {
+  padding-left: 20px;
+}
+
+.rightSide {
+  display: flex;
+}

@@ -1,22 +1,26 @@
-import React from "react";
-import * as styles from "../styles/Footer.module.css"
-import Image from "next/image";
+import styles from "../styles/Footer.module.css";
+import Link from "next/link";
 
+// NavigationLinksComponents
+import mainNavigationLinks from "../constant/footerLink";
+import HeaderNavigationLinksGenerator from "./HeaderNavigationLinks";
 
 const Footer = () => {
   return (
-    <footer className={styles.footer}>
-      <a
-        href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Powered by {` `}
-        <span className={styles.logo}>
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </span>
-      </a>
-    </footer>
+    <div className={styles.navContainer}>
+      <nav className={styles.nav}>
+        <div className={styles.leftSide}>
+        </div>
+        <div className={styles.rightSide}>
+          {mainNavigationLinks.map((element,index) => {
+            return (
+              <HeaderNavigationLinksGenerator key={index} linkInfo={element}/>
+            )
+          })}
+
+        </div>
+      </nav>
+    </div>
   );
 };
 
