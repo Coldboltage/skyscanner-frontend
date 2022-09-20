@@ -66,10 +66,3 @@ const Header = () => {
 
 export default Header;
 
-export async function getServerSideProps(context) {
-  const { user, error, isLoading } = useUser();
-  console.log(`What is user: ${user}`);
-  return {
-    props: { user, isLoading }, // will be passed to the page component as props
-  };
-}
