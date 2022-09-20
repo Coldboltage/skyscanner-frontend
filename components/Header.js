@@ -4,6 +4,8 @@ import Link from "next/link";
 // NavigationLinksComponents
 import mainNavigationLinks from "../constant/mainNavigationLinks";
 import HeaderNavigationLinksGenerator from "./HeaderNavigationLinks";
+import { FaGithub } from 'react-icons/fa';
+
 
 const Header = () => {
   return (
@@ -19,7 +21,7 @@ const Header = () => {
             )
           })}
           <div className={styles.navLink}>
-            <a href="https://github.com/Coldboltage">Github</a>
+            <a href="https://github.com/Coldboltage"><FaGithub/></a>
           </div>
         </div>
       </nav>
