@@ -9,7 +9,7 @@ import Mobile from "is-mobile";
 import { useVisitorData } from "@fingerprintjs/fingerprintjs-pro-react";
 import { useRouter } from "next/router";
 import CurrencySelector from "../components/currencySelector";
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser } from "@auth0/nextjs-auth0";
 
 // Component List
 import Layout from "../components/Layout";
@@ -53,13 +53,14 @@ export default function Home() {
   });
   // FingerprintJS
   const [fingerPrint, setFingerPrint] = useState("");
+  
 
   const { data } = useVisitorData({ immediate: false });
   console.log(data);
 
   const Router = useRouter();
 
-  // const { user, error, isLoading } = useUser();
+  const { user, error, isLoading } = useUser();
 
   useEffect(() => {
     successOrFailure(confirmEmailAddress === email);
@@ -110,9 +111,13 @@ export default function Home() {
     }
   }, [returnDate, departureDate]);
 
-  // useEffect(() => {
-  //   console.log(user)
-  // }, [isLoading]);
+  useEffect(() => {
+    console.log(user);
+    if (user?.given_name && user?.family_name) {
+       setName(`${user.given_name} ${user.family_name}`)
+    }
+   
+  }, [isLoading]);
 
   // useEffect(() => {
 
@@ -461,29 +466,34 @@ export default function Home() {
                     placeholder="reference"
                   />
                 </div>
-                <div>
-                  <label htmlFor="email">Email Address</label>
-                  <input
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onBlur={(e) => ValidateEmail(e.target.value)}
-                    type="email"
-                    placeholder="email address"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="confirmEmail">Confirm Email</label>
-                  <input
-                    value={confirmEmailAddress}
-                    onChange={(e) => {
-                      confirmSetEmailAddress(e.target.value);
-                    }}
-                    onBlur={(e) => {}}
-                    type="email"
-                    placeholder="confirm email"
-                    id={`${successful === true ? "success" : "failed"}`}
-                  />
-                </div>
+                {!user && (
+                  <>
+                    <div>
+                      <label htmlFor="email">Email Address</label>
+                      <input
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onBlur={(e) => ValidateEmail(e.target.value)}
+                        type="email"
+                        placeholder="email address"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="confirmEmail">Confirm Email</label>
+                      <input
+                        value={confirmEmailAddress}
+                        onChange={(e) => {
+                          confirmSetEmailAddress(e.target.value);
+                        }}
+                        onBlur={(e) => {}}
+                        type="email"
+                        placeholder="confirm email"
+                        id={`${successful === true ? "success" : "failed"}`}
+                      />
+                    </div>
+                  </>
+                )}
+
                 <div>
                   <label htmlFor="returnFlight">Return/One Way</label>
                   <select
@@ -495,9 +505,8 @@ export default function Home() {
                         setReturnFlight(true);
                       } else {
                         setReturnFlight(false);
-                        setMinimalHolday(1)
-                        setMaximumHoliday(1)
-
+                        setMinimalHolday(1);
+                        setMaximumHoliday(1);
                       }
                     }}
                   >
