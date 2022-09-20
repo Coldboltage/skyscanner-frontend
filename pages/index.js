@@ -53,7 +53,6 @@ export default function Home() {
   });
   // FingerprintJS
   const [fingerPrint, setFingerPrint] = useState("");
-  
 
   const { data } = useVisitorData({ immediate: false });
   console.log(data);
@@ -114,9 +113,8 @@ export default function Home() {
   useEffect(() => {
     console.log(user);
     if (user?.given_name && user?.family_name) {
-       setName(`${user.given_name} ${user.family_name}`)
+      setName(`${user.given_name} ${user.family_name}`);
     }
-   
   }, [isLoading]);
 
   // useEffect(() => {
@@ -165,6 +163,9 @@ export default function Home() {
     //     process.env.NEXT_PUBLIC_LOCALHOST || "https://skyscannerplusweb.herokuapp.com"
     //   }/api/users/check-email-address/`
     // );
+    console.log("Checking if validation can move on")
+    console.log( 
+      +maximumHoliday >= +minimalHoliday )
     if (
       maximumHolidayTransform >= minimalHolidayTransform &&
       (requiredDateEndTransform > requiredDateStartTransform ||
@@ -173,43 +174,78 @@ export default function Home() {
       returnDateeTransform > departureDateTransform &&
       name.length > 0 &&
       ref.length > 0 &&
-      email.length > 0 &&
-      email === confirmEmailAddress &&
+      (user.sub ?? email.length > 0) &&
+      (user.sub ? user.sub : email === confirmEmailAddress) &&
       returnDate > departureDate &&
       +maximumHoliday >= +minimalHoliday
     ) {
       console.log("Validation successful");
-      const payload = {
-        user: {
-          name: name,
-          email: email,
-          fingerPrintId: data.visitorId,
-        },
-        created: new Date(),
-        ref: ref,
-        currency: {
-          fullCurrency: currency.fullCurrency || "GBP - £",
-          currencyCode: currency.currencyCode || "GBP",
-        },
-        flights: {
-          departure: departure,
-          arrival: arrival,
-          returnFlight: returnFlight,
-        },
-        dates: {
-          departureDate: departureDate,
-          returnDate: returnDate,
-          minimalHoliday: minimalHolidayTransform,
-          maximumHoliday: maximumHoliday,
-          requiredDayStart: requiredDateStartTransform,
-          requiredDayEnd: requiredDateEndTransform,
-          weekendOnly: weekendOnly,
-        },
-        workerPID: 0,
-        isBeingScanned: false,
-        scannedLast: 0,
-        nextScan: 0,
-      };
+      if (user.sub) {
+        var payload = {
+          user: {
+            name: name,
+            fingerPrintId: data.visitorId,
+            sub: user.sub,
+          },
+          created: new Date(),
+          ref: ref,
+          currency: {
+            fullCurrency: currency.fullCurrency || "GBP - £",
+            currencyCode: currency.currencyCode || "GBP",
+          },
+          flights: {
+            departure: departure,
+            arrival: arrival,
+            returnFlight: returnFlight,
+          },
+          dates: {
+            departureDate: departureDate,
+            returnDate: returnDate,
+            minimalHoliday: minimalHolidayTransform,
+            maximumHoliday: maximumHoliday,
+            requiredDayStart: requiredDateStartTransform,
+            requiredDayEnd: requiredDateEndTransform,
+            weekendOnly: weekendOnly,
+          },
+          workerPID: 0,
+          isBeingScanned: false,
+          scannedLast: 0,
+          nextScan: 0,
+        };
+      } else {
+        var payload = {
+          user: {
+            name: name,
+            email: email,
+            fingerPrintId: data.visitorId,
+          },
+          created: new Date(),
+          ref: ref,
+          currency: {
+            fullCurrency: currency.fullCurrency || "GBP - £",
+            currencyCode: currency.currencyCode || "GBP",
+          },
+          flights: {
+            departure: departure,
+            arrival: arrival,
+            returnFlight: returnFlight,
+          },
+          dates: {
+            departureDate: departureDate,
+            returnDate: returnDate,
+            minimalHoliday: minimalHolidayTransform,
+            maximumHoliday: maximumHoliday,
+            requiredDayStart: requiredDateStartTransform,
+            requiredDayEnd: requiredDateEndTransform,
+            weekendOnly: weekendOnly,
+          },
+          workerPID: 0,
+          isBeingScanned: false,
+          scannedLast: 0,
+          nextScan: 0,
+        };
+      }
+
       if (
         requiredDateStartTransform === undefined ||
         requiredDateEndTransform === undefined
@@ -246,7 +282,7 @@ export default function Home() {
         // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
         // "http://localhost:8001/api/users/create/",
         `${
-          process.env.NEXT_PUBLIC_LOCALHOST ||
+          process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB ||
           "https://skyscannerplusweb.herokuapp.com"
         }/api/users/check-flight-amount-by-fingerprintid/`,
         {
@@ -260,7 +296,7 @@ export default function Home() {
       );
       const fingerPrintData = await fingerPrintResponse.json();
 
-      if (fingerPrintData > 1) {
+      if (fingerPrintData > 2) {
         console.log("No more flights for today");
         return { status: false };
       }
@@ -304,7 +340,7 @@ export default function Home() {
           // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
           // "http://localhost:8001/api/users/create/",
           `${
-            process.env.NEXT_PUBLIC_LOCALHOST ||
+            process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB ||
             "https://skyscannerplusweb.herokuapp.com"
           }/api/users/create/`,
           {

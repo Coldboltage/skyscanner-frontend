@@ -145,7 +145,7 @@ export default function Ref({ query: { ref: queryRef } }) {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_LOCALHOST ||
+          process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB ||
           "https://skyscannerplusweb.herokuapp.com"
         }/api/flights/reference-info-latest-flight/`,
         {
