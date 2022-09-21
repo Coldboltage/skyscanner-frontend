@@ -4,6 +4,8 @@ import Link from "next/link";
 
 // NavigationLinksComponents
 import mainNavigationLinks from "../constant/mainNavigationLinks";
+import mainNavigationLinksAfterLogin from "../constant/mainNavigationLinksAfterLogin";
+
 import HeaderNavigationLinksGenerator from "./HeaderNavigationLinks";
 import { FaGithub } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
@@ -29,7 +31,7 @@ const Header = () => {
           <Link href="/">Skyscanner Plus</Link>
         </div>
         <div className={styles.rightSide}>
-          {mainNavigationLinks.map((element, index) => {
+          {(user ? mainNavigationLinksAfterLogin : mainNavigationLinks).map((element, index) => {
             return (
               <HeaderNavigationLinksGenerator key={index} linkInfo={element} />
             );
