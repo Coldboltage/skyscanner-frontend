@@ -488,6 +488,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="reference">Reference</label>
                   <input
+                  style={{backgroundColor: "#d1d0d0"}}
                     disabled
                     value={ref}
                     onChange={(e) => setRef(e.target.value)}
