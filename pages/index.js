@@ -709,6 +709,7 @@ export default function Home() {
                   </label>
                   <input
                     disabled={returnFlight === true ? false : true}
+                    style={{backgroundColor:`${returnFlight === true ? "white" : "rgb(209, 208, 208)"}`}}
                     value={returnFlight === false ? 1 : minimalHoliday}
                     onClick={(e) => {
                       setMinimalHolidayPrevious(minimalHoliday);
@@ -741,7 +742,8 @@ export default function Home() {
                   </label>
                   <input
                     disabled={returnFlight === true ? false : true}
-                    style={{ width: "200px" }}
+                    
+                    style={{backgroundColor:`${returnFlight === true ? "white" : "rgb(209, 208, 208)"}` }}
                     value={returnFlight === false ? 1 : maximumHoliday}
                     onClick={(e) => {
                       setMaximumHolidayPrevious(maximumHoliday);

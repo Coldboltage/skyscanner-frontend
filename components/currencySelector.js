@@ -5,7 +5,6 @@ export default function CurrencySelector({ setCurrency }) {
     <>
       <label htmlFor="exampleRecipientInput">Currency</label>
       <select
-        className="u-full-width"
         id="exampleRecipientInput"
         onChange={(e) => {
           const {  options, selectedIndex } = e.target;
