@@ -172,15 +172,15 @@ export default function Home() {
         requiredDateStartTransform === undefined ||
         requiredDateEndTransform === undefined) &&
       returnDateeTransform > departureDateTransform &&
-      name.length > 0 &&
+      // name.length > 0 &&
       ref.length > 0 &&
-      (user.sub ?? email.length > 0) &&
-      (user.sub ? user.sub : email) &&
+      (user?.sub ?? email.length > 0) &&
+      (user?.sub ? user.sub : email) &&
       returnDate > departureDate &&
       +maximumHoliday >= +minimalHoliday
     ) {
       console.log("Validation successful");
-      if (user.sub) {
+      if (user?.sub) {
         var payload = {
           user: {
             name: name,
