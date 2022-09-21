@@ -743,7 +743,7 @@ export default function Home() {
                   <input
                     disabled={returnFlight === true ? false : true}
                     
-                    style={{backgroundColor:`${returnFlight === true ? "white" : "rgb(209, 208, 208)"}` }}
+                    style={{width: "190px",backgroundColor:`${returnFlight === true ? "white" : "rgb(209, 208, 208)"}` }}
                     value={returnFlight === false ? 1 : maximumHoliday}
                     onClick={(e) => {
                       setMaximumHolidayPrevious(maximumHoliday);

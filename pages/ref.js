@@ -290,7 +290,7 @@ export default function Ref({ query: { ref: queryRef } }) {
             <div className={styles.inputForm}>
               <h3>General Details</h3>
               <div className={styles.inputCollection}>
-                <div className={styles.individualInput}>
+                {/* <div className={styles.individualInput}>
                   {" "}
                   <label htmlFor="name">Name</label>
                   <input
@@ -303,7 +303,7 @@ export default function Ref({ query: { ref: queryRef } }) {
                     placeholder="name"
                     required
                   />
-                </div>
+                </div> */}
                 <div>
                   <label htmlFor="reference">Reference</label>
                   <input
@@ -314,16 +314,18 @@ export default function Ref({ query: { ref: queryRef } }) {
                     placeholder="reference"
                   />
                 </div>
-                <div>
-                  <label htmlFor="email">Email Address</label>
-                  <input
-                    disabled
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    type="email"
-                    placeholder="email address"
-                  />
-                </div>
+                {email && (
+                  <div>
+                    <label htmlFor="email">Email Address</label>
+                    <input
+                      disabled
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      type="email"
+                      placeholder="email address"
+                    />
+                  </div>
+                )}
               </div>
             </div>
             <div className={styles.inputForm}>
