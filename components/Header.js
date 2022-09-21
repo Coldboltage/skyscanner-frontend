@@ -6,6 +6,9 @@ import Link from "next/link";
 import mainNavigationLinks from "../constant/mainNavigationLinks";
 import HeaderNavigationLinksGenerator from "./HeaderNavigationLinks";
 import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { SiAuth0 } from "react-icons/si";
+
 import { useUser } from "@auth0/nextjs-auth0";
 
 const Header = () => {
@@ -44,7 +47,7 @@ const Header = () => {
                   process.env.NEXT_PUBLIC_LOCALHOST || "skyscannerplus.com"
                 }/api/auth/login`}
               >
-                Login
+                {`Login `} <FcGoogle/> {` `} <SiAuth0/>
               </a>
             </div>
           ) : (
