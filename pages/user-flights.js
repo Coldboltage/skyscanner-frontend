@@ -114,7 +114,7 @@ export default function Ref() {
         </Head>
         <div className={styles.titleDiv}>
           <h1 className={styles.title}>
-            Here's your flights by{" "}
+            {`Here's your flights by`}{" "}
             <span className={styles.flight}>Login Key</span>{" "}
           </h1>
         </div>
