@@ -15,6 +15,7 @@ import { useUser } from "@auth0/nextjs-auth0";
 import Layout from "../components/Layout";
 import AirportList from "../components/AirportList";
 import singleNameCombined from "../constant/singleNameCombined";
+import EmailOrLoginButtons from "../components/EmailOrLoginButtons"
 
 const uid = new ShortUniqueId({ length: 10 });
 
@@ -473,6 +474,7 @@ export default function Home() {
             Create a <span className={styles.flight}>Flight</span>{" "}
           </h1>
         </div>
+        <EmailOrLoginButtons/>
         <main className={styles.main}>
           <div>
             {/* <form> */}
