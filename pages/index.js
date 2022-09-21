@@ -15,7 +15,7 @@ import { useUser } from "@auth0/nextjs-auth0";
 import Layout from "../components/Layout";
 import AirportList from "../components/AirportList";
 import singleNameCombined from "../constant/singleNameCombined";
-import EmailOrLoginButtons from "../components/EmailOrLoginButtons"
+import EmailOrLoginButtons from "../components/EmailOrLoginButtons";
 
 const uid = new ShortUniqueId({ length: 10 });
 
@@ -164,9 +164,8 @@ export default function Home() {
     //     process.env.NEXT_PUBLIC_LOCALHOST || "https://skyscannerplusweb.herokuapp.com"
     //   }/api/users/check-email-address/`
     // );
-    console.log("Checking if validation can move on")
-    console.log( 
-      +maximumHoliday >= +minimalHoliday )
+    console.log("Checking if validation can move on");
+    console.log(+maximumHoliday >= +minimalHoliday);
     if (
       maximumHolidayTransform >= minimalHolidayTransform &&
       (requiredDateEndTransform > requiredDateStartTransform ||
@@ -176,7 +175,7 @@ export default function Home() {
       name.length > 0 &&
       ref.length > 0 &&
       (user.sub ?? email.length > 0) &&
-      (user.sub ? user.sub : email === confirmEmailAddress) &&
+      (user.sub ? user.sub : email) &&
       returnDate > departureDate &&
       +maximumHoliday >= +minimalHoliday
     ) {
@@ -474,26 +473,18 @@ export default function Home() {
             Create a <span className={styles.flight}>Flight</span>{" "}
           </h1>
         </div>
-        <EmailOrLoginButtons/>
+        {!user && (
+          <>
+            <EmailOrLoginButtons ValidateEmail={ValidateEmail} setEmail={setEmail} email={email}/>
+          </>
+        )}
+
         <main className={styles.main}>
           <div>
             {/* <form> */}
             <div className={styles.inputForm}>
               <h3>General Details</h3>
               <div className={styles.inputCollection}>
-                <div className={styles.individualInput}>
-                  {" "}
-                  <label htmlFor="name">Name</label>
-                  <input
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                    }}
-                    type="text"
-                    placeholder="name"
-                    required
-                  />
-                </div>
                 <div>
                   <label htmlFor="reference">Reference</label>
                   <input
@@ -504,7 +495,7 @@ export default function Home() {
                     placeholder="reference"
                   />
                 </div>
-                {!user && (
+                {/* {!user && (
                   <>
                     <div>
                       <label htmlFor="email">Email Address</label>
@@ -530,7 +521,7 @@ export default function Home() {
                       />
                     </div>
                   </>
-                )}
+                )} */}
 
                 <div>
                   <label htmlFor="returnFlight">Return/One Way</label>

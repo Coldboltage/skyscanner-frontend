@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaTwitter, FaApple } from "react-icons/fa";
 import { useUser } from "@auth0/nextjs-auth0";
 
-const EmailOrLoginButtons = () => {
+const EmailOrLoginButtons = ({setEmail, ValidateEmail, email}) => {
   const { user, error, isLoading } = useUser();
   return (
     <div className={styles.emailOrLoginDiv}>
@@ -17,6 +17,9 @@ const EmailOrLoginButtons = () => {
             style={{ marginBottom: "0px", textAlign: "center" }}
             type="email"
             placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={(e) => ValidateEmail(e.target.value)}
           />
           <span>Or</span>
           <div>
