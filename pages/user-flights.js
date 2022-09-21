@@ -8,7 +8,7 @@ import * as dayjs from "dayjs";
 
 // Component List
 import Layout from "../components/Layout";
-import UserFlightList from "../components/UserFlightList";
+import UserFlightList from "../components/userFlightList";
 import CheapestFlightsItem from "../components/CheapestFlightsItem";
 
 import { useUser } from "@auth0/nextjs-auth0";
