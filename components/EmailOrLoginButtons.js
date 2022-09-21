@@ -1,7 +1,8 @@
 import React from "react";
 import styles from "../styles/EmailOrLoginButtons.module.css";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook, FaTwitter, FaApple } from "react-icons/fa";
+import { FaFacebook, FaTwitter, FaApple, FaGoogle } from "react-icons/fa";
+import { BsApple } from "react-icons/bs";
+
 import { useUser } from "@auth0/nextjs-auth0";
 
 const EmailOrLoginButtons = ({setEmail, ValidateEmail, email}) => {
@@ -30,10 +31,10 @@ const EmailOrLoginButtons = ({setEmail, ValidateEmail, email}) => {
               }/api/auth/login`}
             >
               <>
-                <FcGoogle />
+                <FaGoogle />
                 <FaFacebook />
                 <FaTwitter />
-                <FaApple />
+                <BsApple />
               </>
               <>{` Login with `}</>
             </a>

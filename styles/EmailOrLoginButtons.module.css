@@ -31,7 +31,7 @@
 .loginButton {
   border: 1px solid #D1D1D1;
   border-radius: 30px;
-  padding: 5px;
+  padding: 10px;
   box-shadow: 10px 5px 5px #D1D1D1;
   display: flex;
   justify-content: space-around;

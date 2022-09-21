@@ -6,7 +6,7 @@ import Link from "next/link";
 import mainNavigationLinks from "../constant/mainNavigationLinks";
 import HeaderNavigationLinksGenerator from "./HeaderNavigationLinks";
 import { FaGithub } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+import { FaGoogle } from "react-icons/fa";
 import { SiAuth0 } from "react-icons/si";
 
 import { useUser } from "@auth0/nextjs-auth0";
@@ -19,9 +19,8 @@ const Header = () => {
     isLoadingOn === false && setIsLoadingOn(false);
     console.log(user);
     console.log(`State of isLoading: ${isLoading}`);
-    console.log(`Checking env ${process.env.NEXT_PUBLIC_LOCALHOST}`)
+    console.log(`Checking env ${process.env.NEXT_PUBLIC_LOCALHOST}`);
   }, [isLoading]);
-
 
   return (
     <div className={styles.navContainer}>
@@ -36,18 +35,19 @@ const Header = () => {
             );
           })}
           <div className={styles.navLink}>
-            <a href="https://github.com/Coldboltage">
+            <a className={styles.aLink} href="https://github.com/Coldboltage">
               <FaGithub />
             </a>
           </div>
           {!user ? (
             <div className={styles.navLink}>
               <a
+                className={styles.aLink}
                 href={`http://${
                   process.env.NEXT_PUBLIC_LOCALHOST || "skyscannerplus.com"
                 }/api/auth/login`}
               >
-                {`Login `} <FcGoogle/> {` `} <SiAuth0/>
+                {`Login `} <FaGoogle /> {` `} <SiAuth0 />
               </a>
             </div>
           ) : (
@@ -68,4 +68,3 @@ const Header = () => {
 };
 
 export default Header;
-

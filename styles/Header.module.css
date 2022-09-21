@@ -14,8 +14,16 @@
 
 .navLink {
   padding-left: 20px;
+  display: flex;
 }
 
 .rightSide {
   display: flex;
+}
+
+.aLink {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
 }
