@@ -37,3 +37,27 @@
   justify-content: space-around;
   align-items: center;
 }
+
+@media all and (orientation: portrait) {
+  .innerContainer {
+    display: flex;
+    gap:10px;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px
+  }
+
+  .mainContainer {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    margin: 0px auto;
+  }
+
+  .loginButton {
+    gap:15px;
+    padding: 10px 20px;
+  }
+}
