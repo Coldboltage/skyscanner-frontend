@@ -19,6 +19,9 @@ export default function Ref({ query: { ref: queryRef } }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [ref, setRef] = useState(queryRef || "");
+  const [currency, setCurrency] = useState();
+  const [returnFlight, setReturnFlight] = useState();
+
   // Needed
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
@@ -176,8 +179,9 @@ export default function Ref({ query: { ref: queryRef } }) {
         // Destructure Result
         const {
           user: { name, email },
+          currency,
           ref,
-          flights: { arrival, departure },
+          flights: { arrival, departure, returnFlight },
           dates: {
             departureDate,
             returnDate,
@@ -202,6 +206,8 @@ export default function Ref({ query: { ref: queryRef } }) {
           data.latestFlights;
         setCheapestFlights(cheapestFlightsOrderMax);
         setBestFlights(bestFlightsOrderMax);
+        setCurrency(currency)
+        setReturnFlight(returnFlight)
       } else if (data.error === "No scan has been done yet") {
         toast.warn(data.error, {
           position: "top-right",
@@ -214,8 +220,9 @@ export default function Ref({ query: { ref: queryRef } }) {
         });
         const {
           user: { name, email },
+          currency,
           ref,
-          flights: { arrival, departure },
+          flights: { arrival, departure, returnFlight },
           dates: {
             departureDate,
             returnDate,
@@ -236,6 +243,8 @@ export default function Ref({ query: { ref: queryRef } }) {
         setCheapestFlights([]);
         setBestFlights([]);
         setWeekendOnly(weekendOnly === "true" ? "Yes" : "No");
+        setCurrency(currency)
+        setReturnFlight(returnFlight)
       } else {
         console.log("Nothing was found");
         toast.error("No flight could be found with that reference", {
@@ -314,6 +323,28 @@ export default function Ref({ query: { ref: queryRef } }) {
                     placeholder="reference"
                   />
                 </div>
+                <div>
+                  <label htmlFor="Return or One Way">Return or One Way</label>
+                  <input
+                    disabled
+                    value={returnFlight === true ? "Return Flight" : "One Way"}
+                    onChange={(e) => setRef(e.target.value)}
+                    type="text"
+                    placeholder="Return or One Way"
+                  />
+                </div>
+                {console.log(currency)}
+                <div>
+                  <label htmlFor="currency">Currency</label>
+                  <input
+                    disabled
+                    value={currency?.fullCurrency}
+                    onChange={(e) => setRef(e.target.value)}
+                    type="text"
+                    placeholder="currency"
+                  />
+                </div>
+                
                 {email && (
                   <div>
                     <label htmlFor="email">Email Address</label>

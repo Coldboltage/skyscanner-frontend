@@ -19,6 +19,7 @@ export default function Ref() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [ref, setRef] = useState("");
+  const [returnFlight, setReturnFlight] = useState();
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
   const [departureDate, setDepartureDate] = useState("");
@@ -27,6 +28,7 @@ export default function Ref() {
   const [maximumHoliday, setMaximumHoliday] = useState("");
   const [requiredDateStart, setRequiredDateStart] = useState();
   const [requiredDateEnd, setRequiredDateEnd] = useState();
+  const [currency, setCurrency] = useState();
 
   // State specifically for /email
   const [typedState, setTypedState] = useState("");
@@ -45,6 +47,9 @@ export default function Ref() {
     setReturnDate(Router.query.returnDate);
     setMinimalHolday(Router.query.minimalHoliday);
     setMaximumHoliday(Router.query.maximumHoliday);
+    setReturnFlight(Router.query.returnFlight);
+    setReturnFlight(Router.query.returnFlight);
+    setCurrency(Router.query.currency);
 
     name,
       ref,
@@ -54,8 +59,12 @@ export default function Ref() {
       departureDate,
       returnDate,
       minimalHoliday,
-      maximumHoliday;
+      maximumHoliday,
+      returnFlight,
+      currency;
   }, [Router.query]);
+
+  console.log(Router.query);
 
   // useEffect(() => {
   //   airportTextCheck(departure)
@@ -147,7 +156,11 @@ export default function Ref() {
                   {email}
                 </div>
               )}
-
+              <div className={styles.individualPara}>
+                <span className={styles.titleItem}>Return or One Way</span>:
+                {` `}
+                {returnFlight === true ? "Return Flight" : "One Way"}
+              </div>
               <div className={styles.individualPara}>
                 <span className={styles.titleItem}>Departure</span>:{` `}
                 {departure}
@@ -181,6 +194,10 @@ export default function Ref() {
                 </span>
                 :{` `}
                 {maximumHoliday}
+              </div>
+              <div className={styles.individualPara}>
+                <span className={styles.titleItem}>Currency</span>:{` `}
+                {currency}
               </div>
               <div className={styles.individualPara}>
                 <input

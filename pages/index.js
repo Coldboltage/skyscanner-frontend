@@ -363,6 +363,7 @@ export default function Home() {
           draggable: true,
           progress: undefined,
         });
+        console.log(currency)
         Router.push(
           {
             pathname: "/confirmation",
@@ -370,12 +371,14 @@ export default function Home() {
               name,
               ref,
               email,
+              returnFlight: returnFlight,
               departure,
               arrival,
               departureDate,
               returnDate,
               minimalHoliday,
               maximumHoliday,
+              currency: currency.fullCurrency,
             },
           },
           "/confirmation"
