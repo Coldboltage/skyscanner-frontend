@@ -399,16 +399,10 @@ export default function Home() {
       });
       toast.error(
         `Missing: 
-      ${name.length <= 0 ? "name, " : ""} 
-      ${email.length <= 0 ? "email, " : ""}
-      ${
-        email !== confirmEmailAddress || confirmEmailAddress.length < 3
-          ? "confirmation email, "
-          : ""
-      }
-      ${!departure ? "departure, " : ""}
-      ${!arrival ? "arrival, " : ""}
-      ${!minimalHoliday ? "minimal holiday, " : ""}
+      ${email.length <= 0 ? "email  " : ""}
+      ${!departure ? "departure " : ""}
+      ${!arrival ? "arrival " : ""}
+      ${!minimalHoliday ? "minimal holiday " : ""}
       ${!maximumHoliday ? "maximum holiday" : ""}`,
         {
           position: "top-right",
@@ -736,7 +730,7 @@ export default function Home() {
                       }
                     }}
                     type="number"
-                    placeholder="minimal holiday"
+                    placeholder="minimal holiday: days"
                   />
                 </div>
                 <div>
@@ -775,7 +769,7 @@ export default function Home() {
                       }
                     }}
                     type="number"
-                    placeholder="maximum holiday"
+                    placeholder="maximum holiday: days"
                     min={minimalHoliday}
                     max={
                       (new Date(returnDate) - new Date(departureDate)) /
