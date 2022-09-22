@@ -207,10 +207,14 @@ export default function Ref() {
                   onClick={() => Router.push(`/ref?ref=${ref}`)}
                 />
               </div>
+              {/* Confirmation Message to Users who need it */}
+              <div style={{width: "700px"}} className={styles.individualPara}>
+                {`Your flight has successfully been added to our database. Your flight will start to be scanned inside two minutes. Please note, depending on the amount of days needing to be scanned, time will vary upon when your results will be ready. Please bookmark the next page or add your email so you can be notified.`}
+              </div>
             </div>
           </div>
           {/* Check if flight exists */}
-          {result.length > 0 && (
+          {/* {result.length > 0 && (
             <>
               <div className={styles.inputForm}>
                 <h3>References</h3>
@@ -223,7 +227,7 @@ export default function Ref() {
                 </div>
               </div>
             </>
-          )}
+          )} */}
         </main>
       </div>
     </Layout>

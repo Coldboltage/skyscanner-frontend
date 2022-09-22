@@ -36,7 +36,7 @@ const EmailOrLoginButtons = ({setEmail, ValidateEmail, email}) => {
                 <FaTwitter />
                 <BsApple />
               </>
-              <>{` Login with `}</>
+              <>{` Login with`}</>
             </a>
           </div>
         </div>
