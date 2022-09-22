@@ -262,6 +262,7 @@ export default function Ref({ query: { ref: queryRef } }) {
     }
   };
 
+
   return (
     <Layout>
       <div className={styles.container}>
@@ -518,7 +519,7 @@ export default function Ref({ query: { ref: queryRef } }) {
                 <h3>Best Flights</h3>
                 <div className={styles.flightsContainer}>
                   {" "}
-                  {cheapestFlights.map((element, index) => {
+                  {bestFlights.map((element, index) => {
                     return (
                       <CheapestFlightsItem
                         key={index}
