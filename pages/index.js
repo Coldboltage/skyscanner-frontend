@@ -297,7 +297,7 @@ export default function Home() {
       const fingerPrintData = await fingerPrintResponse.json();
 
       if (user.sub === "google-oauth2|107234380339450042425") {
-        console("Hi hi")
+        console.log("Hi hi")
       } else if (fingerPrintData > 2) {
         console.log("No more flights for today");
         return { status: false };
