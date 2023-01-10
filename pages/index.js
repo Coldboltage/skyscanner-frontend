@@ -342,7 +342,7 @@ export default function Home() {
           // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
           // "http://localhost:8001/api/users/create/",
           `${
-            process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB ||
+            process.env.NEXT_PUBLIC_BACKEND_LOCAL_API ||
             "https://skyscannerplusweb.herokuapp.com"
           }/api/users/create/`,
           {

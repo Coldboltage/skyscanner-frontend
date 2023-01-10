@@ -27,7 +27,7 @@ const EmailOrLoginButtons = ({setEmail, ValidateEmail, email}) => {
             <a
               className={styles.loginButton}
               href={`http://${
-                process.env.NEXT_PUBLIC_LOCALHOST || "skyscannerplus.com"
+                process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB || "skyscannerplus.com"
               }/api/auth/login`}
             >
               <>

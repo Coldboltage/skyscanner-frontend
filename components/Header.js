@@ -21,7 +21,7 @@ const Header = () => {
     isLoadingOn === false && setIsLoadingOn(false);
     console.log(user);
     console.log(`State of isLoading: ${isLoading}`);
-    console.log(`Checking env ${process.env.NEXT_PUBLIC_LOCALHOST}`);
+    console.log(`Checking env ${process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB}`);
   }, [isLoading]);
 
   return (
@@ -46,7 +46,7 @@ const Header = () => {
               <a
                 className={styles.aLink}
                 href={`http://${
-                  process.env.NEXT_PUBLIC_LOCALHOST || "skyscannerplus.com"
+                  process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB || "skyscannerplus.com"
                 }/api/auth/login`}
               >
                 {`Login `} <FaGoogle /> {` `} <SiAuth0 />
@@ -56,7 +56,7 @@ const Header = () => {
             <div className={styles.navLink}>
               <a
                 href={`http://${
-                  process.env.NEXT_PUBLIC_LOCALHOST || "skyscannerplus.com"
+                  process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB || "skyscannerplus.com"
                 }/api/auth/logout`}
               >
                 Logout
