@@ -1,6 +1,6 @@
 export default [
   {
-    name: "About Skyscanner Plus",
+    name: "About Explorer Plus",
     link: "/about"
   },
 

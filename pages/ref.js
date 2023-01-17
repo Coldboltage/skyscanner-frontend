@@ -145,107 +145,38 @@ export default function Ref({ query: { ref: queryRef } }) {
     console.log(
       `I'm making a call to /reference-info-latest-flight with the reference: ${reference}`
     );
-    try {
-      const response = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB ||
-          "https://skyscannerplusweb.herokuapp.com"
-        }/api/flights/reference-info-latest-flight/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cors: "no-cors",
-          body: JSON.stringify({ reference: reference }),
-        }
+    let response;
+    if (process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB) {
+      response = await fetch(
+        `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${reference}`
       );
-      console.log("Sent");
-      console.log(response);
-      console.log("Checking response");
-      const data = await response.json();
-      console.log(data);
-      if (response.ok === true) {
-        toast.success("Flight found!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        // const data = await response.json();
-        // Destructure Result
-        const {
-          user: { name, email },
-          currency,
-          ref,
-          flights: { arrival, departure, returnFlight },
-          dates: {
-            departureDate,
-            returnDate,
-            minimalHoliday,
-            maximumHoliday,
-            weekendOnly,
-          },
-        } = data.result;
-        console.log(`What is weekendOnly: ${weekendOnly}`);
-        setName(name);
-        setEmail(email);
-        setRef(ref);
-        setArrival(arrival);
-        setDeparture(departure);
-        setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
-        setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
-        setMinimalHolday(minimalHoliday);
-        setMaximumHoliday(maximumHoliday);
-        setWeekendOnly(weekendOnly === true ? "Yes" : "No");
-        // Checking latestFlight
-        const { bestFlightsOrderMax, cheapestFlightsOrderMax } =
-          data.latestFlights;
-        setCheapestFlights(cheapestFlightsOrderMax);
-        setBestFlights(bestFlightsOrderMax);
-        setCurrency(currency)
-        setReturnFlight(returnFlight)
-      } else if (data.error === "No scan has been done yet") {
-        toast.warn(data.error, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        const {
-          user: { name, email },
-          currency,
-          ref,
-          flights: { arrival, departure, returnFlight },
-          dates: {
-            departureDate,
-            returnDate,
-            minimalHoliday,
-            maximumHoliday,
-            weekendOnly,
-          },
-        } = data.result;
-        setName(name);
-        setEmail(email);
-        setRef(ref);
-        setArrival(arrival);
-        setDeparture(departure);
-        setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
-        setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
-        setMinimalHolday(minimalHoliday);
-        setMaximumHoliday(maximumHoliday);
-        setCheapestFlights([]);
-        setBestFlights([]);
-        setWeekendOnly(weekendOnly === "true" ? "Yes" : "No");
-        setCurrency(currency)
-        setReturnFlight(returnFlight)
-      } else {
+    } else {
+      try {
+        response = await fetch(
+          `http://${
+            process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB ||
+            "https://skyscannerplusweb.herokuapp.com"
+          }/api/flights/reference-info-latest-flight/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            cors: "no-cors",
+            body: JSON.stringify({ reference: reference }),
+          }
+        );
+        console.log("Sent");
+        console.log(response);
+        console.log("Checking response");
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (response.ok === false) {
+      {
         console.log("Nothing was found");
         toast.error("No flight could be found with that reference", {
           position: "top-right",
@@ -257,11 +188,101 @@ export default function Ref({ query: { ref: queryRef } }) {
           progress: undefined,
         });
       }
-    } catch (error) {
-      console.log(error);
+    } else if (response.ok === true) {
+      const data = await response.json();
+      console.log(data);
+      toast.success("Flight found!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      // const data = await response.json();
+      // Destructure Result
+      const {
+        user: { name, email },
+        currency,
+        ref,
+        flights: { arrival, departure, returnFlight },
+        dates: {
+          departureDate,
+          returnDate,
+          minimalHoliday,
+          maximumHoliday,
+          weekendOnly,
+        },
+      } = data.result;
+      console.log(`What is weekendOnly: ${weekendOnly}`);
+      setName(name);
+      setEmail(email);
+      setRef(ref);
+      setArrival(arrival);
+      setDeparture(departure);
+      setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
+      setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
+      setMinimalHolday(minimalHoliday);
+      setMaximumHoliday(maximumHoliday);
+      setWeekendOnly(weekendOnly === true ? "Yes" : "No");
+      // Checking latestFlight
+      const { bestFlightsOrderMax, cheapestFlightsOrderMax } =
+        data.latestFlights;
+      setCheapestFlights(cheapestFlightsOrderMax);
+      setBestFlights(bestFlightsOrderMax);
+      setCurrency(currency);
+      setReturnFlight(returnFlight);
+    } else if (data.error === "No scan has been done yet") {
+      toast.warn(data.error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      const {
+        user: { name, email },
+        currency,
+        ref,
+        flights: { arrival, departure, returnFlight },
+        dates: {
+          departureDate,
+          returnDate,
+          minimalHoliday,
+          maximumHoliday,
+          weekendOnly,
+        },
+      } = data.result;
+      setName(name);
+      setEmail(email);
+      setRef(ref);
+      setArrival(arrival);
+      setDeparture(departure);
+      setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
+      setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
+      setMinimalHolday(minimalHoliday);
+      setMaximumHoliday(maximumHoliday);
+      setCheapestFlights([]);
+      setBestFlights([]);
+      setWeekendOnly(weekendOnly === "true" ? "Yes" : "No");
+      setCurrency(currency);
+      setReturnFlight(returnFlight);
+    } else {
+      console.log("Nothing was found");
+      toast.error("No flight could be found with that reference", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
-
 
   return (
     <Layout>
@@ -345,7 +366,7 @@ export default function Ref({ query: { ref: queryRef } }) {
                     placeholder="currency"
                   />
                 </div>
-                
+
                 {email && (
                   <div>
                     <label htmlFor="email">Email Address</label>

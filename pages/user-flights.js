@@ -15,7 +15,6 @@ import { useUser } from "@auth0/nextjs-auth0";
 
 export default function Ref() {
   // Console.log test
-  console.log(`env ${process.env.NEXT_PUBLIC_LOCALHOST}`);
   const { user, error, isLoading } = useUser();
 
   const [name, setName] = useState("");
@@ -29,15 +28,15 @@ export default function Ref() {
   const [maximumHoliday, setMaximumHoliday] = useState("");
   const [requiredDateStart, setRequiredDateStart] = useState();
   const [requiredDateEnd, setRequiredDateEnd] = useState();
-  const [loading, setLoading] = useState()
+  const [loading, setLoading] = useState();
 
   // State specifically for /email
   const [typedState, setTypedState] = useState("");
   const [result, setResult] = useState([]);
 
   useEffect(() => {
-    setLoading(isLoading)
-    console.log(loading)
+    setLoading(isLoading);
+    console.log(loading);
     // declare the data fetching function
     const fetchData = async () => {
       await getFlightsBySub(user.sub);
@@ -55,54 +54,60 @@ export default function Ref() {
     console.log(
       `I'm making a call to /get-references-by-email with the email: ${email}`
     );
-    try {
-      const response = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB ||
-          "https://skyscannerplusweb.herokuapp.com"
-        }/api/users/get-flights-by-sub`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cors: "no-cors",
-          body: JSON.stringify({post:userSub}),
-        }
-      );
-      console.log("Sent");
-      console.log(response);
-      if (response.ok === true) {
-        toast.success("Email found on database!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        const data = await response.json();
-        // Destructure Result
-        const { result, message } = data;
-        setResult(data);
-      } else {
-        console.log("Nothing was found");
-        toast.error("That email address was not found", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+    let response;
+    if (process.env.NEXT_PUBLIC_BACKEND_LOCAL_API) {
+      response = await fetch(`http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${user.sub}/sub`)
+    } else {
+      try {
+        response = await fetch(
+          `${
+            process.env.NEXT_PUBLIC_BACKEND_LOCAL_API ||
+            "https://skyscannerplusweb.herokuapp.com"
+          }/api/users/get-flights-by-sub`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            cors: "no-cors",
+            body: JSON.stringify({ post: userSub }),
+          }
+        );
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    }
+
+    console.log("Sent");
+    console.log(response);
+    if (response.ok === true) {
+      toast.success("Email found on database!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      const data = await response.json();
+      // Destructure Result
+      const { result, message } = data;
+      setResult(data);
+    } else {
+      console.log("Nothing was found");
+      toast.error("That email address was not found", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
-  console.log(result)
+  console.log(result);
 
   return (
     <Layout>

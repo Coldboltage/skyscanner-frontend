@@ -33,7 +33,7 @@ const about = () => {
                 fly out and in return flights, when to return. As you search for
                 more than one flight, you're more likely to get cheaper flights
                 than what Skyscanner would offer. I made this comparison page to
-                show the differences of Skyscanner Plus and how much cheaper Skyscanner Plus can be. `}
+                show the differences of Skyscanner and how much cheaper Skyscanner Plus can be. `}
               </p>
               <h5 className={styles.titleItem}>
                 {`How does Skyscanner Plus offer cheaper flights?`}

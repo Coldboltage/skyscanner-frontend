@@ -52,6 +52,7 @@ export default function Home() {
     fullCurrency: "EUR - €",
     currencyCode: "EUR",
   });
+  const [alertPrice, setAlertPrice] = useState()
   // FingerprintJS
   const [fingerPrint, setFingerPrint] = useState("");
 
@@ -199,8 +200,8 @@ export default function Home() {
             returnFlight: returnFlight,
           },
           dates: {
-            departureDate: departureDate,
-            returnDate: returnDate,
+            departureDate: departureDateTransform,
+            returnDate: returnDateeTransform,
             minimalHoliday: minimalHolidayTransform,
             maximumHoliday: maximumHoliday,
             requiredDayStart: requiredDateStartTransform,
@@ -231,8 +232,8 @@ export default function Home() {
             returnFlight: returnFlight,
           },
           dates: {
-            departureDate: departureDate,
-            returnDate: returnDate,
+            departureDate: departureDateTransform,
+            returnDate: returnDateeTransform,
             minimalHoliday: minimalHolidayTransform,
             maximumHoliday: maximumHoliday,
             requiredDayStart: requiredDateStartTransform,
@@ -277,27 +278,33 @@ export default function Home() {
       //   }
       // } else {
       //   localStorage.setItem("ref", JSON.stringify([ref]));
-
-      const fingerPrintResponse = await fetch(
-        // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
-        // "http://localhost:8001/api/users/create/",
-        `${
-          process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB ||
-          "https://skyscannerplusweb.herokuapp.com"
-        }/api/users/check-flight-amount-by-fingerprintid/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ fingerPrintId: data.visitorId }),
-          cors: "no-cors",
-        }
-      );
+      let fingerPrintResponse;
+      if (process.env.NEXT_PUBLIC_BACKEND_LOCAL_API) {
+        fingerPrintResponse = await fetch(
+          `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${data.visitorId}/fingerPrint`
+        );
+      } else {
+        fingerPrintResponse = await fetch(
+          // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
+          // "http://localhost:8001/api/users/create/",
+          `${
+            process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB ||
+            "https://skyscannerplusweb.herokuapp.com"
+          }/api/users/check-flight-amount-by-fingerprintid/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ fingerPrintId: data.visitorId }),
+            cors: "no-cors",
+          }
+        );
+      }
       const fingerPrintData = await fingerPrintResponse.json();
 
       if (user.sub === "google-oauth2|107234380339450042425") {
-        console.log("Hi hi")
+        console.log("Hi hi");
       } else if (fingerPrintData > 2) {
         console.log("No more flights for today");
         return { status: false };
@@ -337,57 +344,74 @@ export default function Home() {
     const { payload, status } = await formValidation(testObject);
     console.log(payload);
     if (status) {
-      try {
-        const response = await fetch(
-          // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
-          // "http://localhost:8001/api/users/create/",
-          `${
-            process.env.NEXT_PUBLIC_BACKEND_LOCAL_API ||
-            "https://skyscannerplusweb.herokuapp.com"
-          }/api/users/create/`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-            cors: "no-cors",
-          }
-        );
-        const data = await response.json();
-        console.log(data);
-        toast("✅ The flight has been added!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        console.log(currency)
-        Router.push(
-          {
-            pathname: "/confirmation",
-            query: {
-              name,
-              ref,
-              email,
-              returnFlight: returnFlight,
-              departure,
-              arrival,
-              departureDate,
-              returnDate,
-              minimalHoliday,
-              maximumHoliday,
-              currency: currency.fullCurrency,
-            },
-          },
-          "/confirmation"
-        );
-      } catch (error) {
-        console.log(error);
+      let response;
+      if (process.env.NEXT_PUBLIC_BACKEND_LOCAL_API) {
+        try {
+          response = await fetch(
+            `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(payload),
+              cors: "no-cors",
+            }
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        try {
+          response = await fetch(
+            // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
+            // "http://localhost:8001/api/users/create/",
+            `${
+              process.env.NEXT_PUBLIC_BACKEND_LOCAL_API ||
+              "https://skyscannerplusweb.herokuapp.com"
+            }/api/users/create/`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(payload),
+              cors: "no-cors",
+            }
+          );
+        } catch (error) {
+          console.log(error);
+        }
       }
+      toast("✅ The flight has been added!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      console.log(currency);
+      Router.push(
+        {
+          pathname: "/confirmation",
+          query: {
+            name,
+            ref,
+            email,
+            returnFlight: returnFlight,
+            departure,
+            arrival,
+            departureDate,
+            returnDate,
+            minimalHoliday,
+            maximumHoliday,
+            currency: currency.fullCurrency,
+          },
+        },
+        "/confirmation"
+      );
     } else {
       ("We didn't make a call to the server as a result of validation failure");
       toast.error("Error with the form!", {
@@ -474,7 +498,11 @@ export default function Home() {
         </div>
         {!user && (
           <>
-            <EmailOrLoginButtons ValidateEmail={ValidateEmail} setEmail={setEmail} email={email}/>
+            <EmailOrLoginButtons
+              ValidateEmail={ValidateEmail}
+              setEmail={setEmail}
+              email={email}
+            />
           </>
         )}
 
@@ -487,7 +515,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="reference">Reference</label>
                   <input
-                  style={{backgroundColor: "#d1d0d0"}}
+                    style={{ backgroundColor: "#d1d0d0" }}
                     disabled
                     value={ref}
                     onChange={(e) => setRef(e.target.value)}
@@ -708,7 +736,11 @@ export default function Home() {
                   </label>
                   <input
                     disabled={returnFlight === true ? false : true}
-                    style={{backgroundColor:`${returnFlight === true ? "white" : "rgb(209, 208, 208)"}`}}
+                    style={{
+                      backgroundColor: `${
+                        returnFlight === true ? "white" : "rgb(209, 208, 208)"
+                      }`,
+                    }}
                     value={returnFlight === false ? 1 : minimalHoliday}
                     onClick={(e) => {
                       setMinimalHolidayPrevious(minimalHoliday);
@@ -741,8 +773,12 @@ export default function Home() {
                   </label>
                   <input
                     disabled={returnFlight === true ? false : true}
-                    
-                    style={{width: "190px",backgroundColor:`${returnFlight === true ? "white" : "rgb(209, 208, 208)"}` }}
+                    style={{
+                      width: "190px",
+                      backgroundColor: `${
+                        returnFlight === true ? "white" : "rgb(209, 208, 208)"
+                      }`,
+                    }}
                     value={returnFlight === false ? 1 : maximumHoliday}
                     onClick={(e) => {
                       setMaximumHolidayPrevious(maximumHoliday);
@@ -832,6 +868,15 @@ export default function Home() {
                 {/* Select */}
                 <div>
                   <CurrencySelector setCurrency={setCurrency} />
+                </div>
+                <div>
+                  <label htmlFor="alertPrice">Alert Price</label>
+                  <input
+                    value={alertPrice}
+                    onChange={(e) => setAlertPrice(e.target.value)}
+                    type="number"
+                    placeholder="Price for Alert"
+                  />
                 </div>
               </div>
             </div>

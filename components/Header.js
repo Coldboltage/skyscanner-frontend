@@ -28,7 +28,7 @@ const Header = () => {
     <div className={styles.navContainer}>
       <nav className={styles.nav}>
         <div className={styles.leftSide}>
-          <Link href="/">Skyscanner Plus</Link>
+          <Link href="/">Explorer Plus</Link>
         </div>
         <div className={styles.rightSide}>
           {(user ? mainNavigationLinksAfterLogin : mainNavigationLinks).map((element, index) => {
