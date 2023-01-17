@@ -212,6 +212,7 @@ export default function Home() {
           isBeingScanned: false,
           scannedLast: 0,
           nextScan: 0,
+          alertPrice,
         };
       } else {
         var payload = {
@@ -244,6 +245,7 @@ export default function Home() {
           isBeingScanned: false,
           scannedLast: 0,
           nextScan: 0,
+          alertPrice,
         };
       }
 
