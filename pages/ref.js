@@ -148,7 +148,7 @@ export default function Ref({ query: { ref: queryRef } }) {
     let response;
     if (process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB) {
       response = await fetch(
-        `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${reference}`
+        `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${reference}/getByRef`
       );
     } else {
       try {
@@ -188,8 +188,48 @@ export default function Ref({ query: { ref: queryRef } }) {
           progress: undefined,
         });
       }
-    } else if (response.ok === true) {
-      const data = await response.json();
+    }  
+    const data = await response.json();
+    if (data.scanDate.length === 0) {
+      toast.warn("No scan has been done yet", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      const {
+        // user: { name, email },
+        currency,
+        ref,
+        flights: { arrival, departure, returnFlight },
+        dates: {
+          departureDate,
+          returnDate,
+          minimalHoliday,
+          maximumHoliday,
+          weekendOnly,
+        },
+      } = data;
+      setName(name);
+      setEmail(email);
+      setRef(ref);
+      setArrival(arrival);
+      setDeparture(departure);
+      setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
+      setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
+      setMinimalHolday(minimalHoliday);
+      setMaximumHoliday(maximumHoliday);
+      setCheapestFlights([]);
+      setBestFlights([]);
+      setWeekendOnly(weekendOnly === "true" ? "Yes" : "No");
+      setCurrency(currency);
+      setReturnFlight(returnFlight);
+    }
+    
+    else if (response.ok === true) {
       console.log(data);
       toast.success("Flight found!", {
         position: "top-right",
@@ -202,8 +242,9 @@ export default function Ref({ query: { ref: queryRef } }) {
       });
       // const data = await response.json();
       // Destructure Result
+      console.log(data)
       const {
-        user: { name, email },
+        // user: { name, email },
         currency,
         ref,
         flights: { arrival, departure, returnFlight },
@@ -214,7 +255,7 @@ export default function Ref({ query: { ref: queryRef } }) {
           maximumHoliday,
           weekendOnly,
         },
-      } = data.result;
+      } = data;
       console.log(`What is weekendOnly: ${weekendOnly}`);
       setName(name);
       setEmail(email);
@@ -231,43 +272,6 @@ export default function Ref({ query: { ref: queryRef } }) {
         data.latestFlights;
       setCheapestFlights(cheapestFlightsOrderMax);
       setBestFlights(bestFlightsOrderMax);
-      setCurrency(currency);
-      setReturnFlight(returnFlight);
-    } else if (data.error === "No scan has been done yet") {
-      toast.warn(data.error, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      const {
-        user: { name, email },
-        currency,
-        ref,
-        flights: { arrival, departure, returnFlight },
-        dates: {
-          departureDate,
-          returnDate,
-          minimalHoliday,
-          maximumHoliday,
-          weekendOnly,
-        },
-      } = data.result;
-      setName(name);
-      setEmail(email);
-      setRef(ref);
-      setArrival(arrival);
-      setDeparture(departure);
-      setDepartureDate(dayjs(departureDate).format("DD, MMMM YYYY"));
-      setReturnDate(dayjs(returnDate).format("DD, MMMM YYYY"));
-      setMinimalHolday(minimalHoliday);
-      setMaximumHoliday(maximumHoliday);
-      setCheapestFlights([]);
-      setBestFlights([]);
-      setWeekendOnly(weekendOnly === "true" ? "Yes" : "No");
       setCurrency(currency);
       setReturnFlight(returnFlight);
     } else {

@@ -8,7 +8,7 @@ import * as dayjs from "dayjs";
 
 // Component List
 import Layout from "../components/Layout";
-import ReferenceItem from "../components/ReferenceList"
+import ReferenceItem from "../components/ReferenceList";
 import CheapestFlightsItem from "../components/CheapestFlightsItem";
 
 export default function Ref() {
@@ -41,54 +41,60 @@ export default function Ref() {
     console.log(
       `I'm making a call to /get-references-by-email with the email: ${email}`
     );
-    try {
-      const response = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_LOCALHOST ||
-          "https://skyscannerplusweb.herokuapp.com"
-        }/api/flights/get-references-by-email/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cors: "no-cors",
-          body: JSON.stringify({ email: email }),
-        }
+    let response;
+    if (process.env.NEXT_PUBLIC_BACKEND_LOCAL_API) {
+      response = await fetch(
+        `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${email}/getByEmail`
       );
-      console.log("Sent");
-      console.log(response)
-      if ((response.ok === true)) {
-        toast.success('Email found on database!', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          });
-        const data = await response.json();
-        // Destructure Result
-        const {
-          result,
-          message
-        } = data;
-        setResult(result);
-      } else {
-        console.log("Nothing was found")
-        toast.error('That email address was not found', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          });
+    } else {
+      try {
+        response = await fetch(
+          `${
+            process.env.NEXT_PUBLIC_LOCALHOST ||
+            "https://skyscannerplusweb.herokuapp.com"
+          }/api/flights/get-references-by-email/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            cors: "no-cors",
+            body: JSON.stringify({ email: email }),
+          }
+        );
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    }
+
+    console.log("Sent");
+    console.log(response);
+    if (response.ok === true) {
+      toast.success("Email found on database!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      const data = await response.json();
+      // Destructure Result
+      const { result, message } = data;
+      console.log(data)
+      setResult(data);
+    } else {
+      console.log("Nothing was found");
+      toast.error("That email address was not found", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
@@ -102,7 +108,7 @@ export default function Ref() {
         </Head>
         <div className={styles.titleDiv}>
           <h1 className={styles.title}>
-            Find your flights by {" "}
+            Find your flights by{" "}
             <span className={styles.flight}>Email Address</span>{" "}
           </h1>
         </div>
@@ -119,10 +125,7 @@ export default function Ref() {
                     onChange={(e) => setTypedState(e.target.value)}
                   />
                 </div>
-                <input
-                  type="submit"
-                  onClick={() => getEmail(typedState)}
-                />
+                <input type="submit" onClick={() => getEmail(typedState)} />
               </div>
             </div>
           </div>
@@ -134,13 +137,8 @@ export default function Ref() {
                 <div className={styles.flightsContainer}>
                   {" "}
                   {result.map((element, index) => {
-                    console.log(element)
-                    return (
-                      <ReferenceItem
-                        key={index}
-                        reference={element}
-                      />
-                    );
+                    console.log(element);
+                    return <ReferenceItem key={element.ref} reference={element} />;
                   })}
                 </div>
               </div>
