@@ -56,7 +56,7 @@ export default function Ref() {
     );
     let response;
     if (process.env.NEXT_PUBLIC_BACKEND_LOCAL_API) {
-      response = await fetch(`http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${user.sub}/sub`)
+      response = await fetch(`http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${user.sub}/suborm`)
     } else {
       try {
         response = await fetch(

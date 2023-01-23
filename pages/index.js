@@ -21,7 +21,7 @@ const uid = new ShortUniqueId({ length: 10 });
 
 export default function Home() {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(null);
   // Confirm Email Address
   const [confirmEmailAddress, confirmSetEmailAddress] = useState("");
   const [ref, setRef] = useState(uid().toUpperCase());
@@ -52,7 +52,7 @@ export default function Home() {
     fullCurrency: "EUR - €",
     currencyCode: "EUR",
   });
-  const [alertPrice, setAlertPrice] = useState()
+  const [alertPrice, setAlertPrice] = useState();
   // FingerprintJS
   const [fingerPrint, setFingerPrint] = useState("");
 
@@ -208,6 +208,7 @@ export default function Home() {
             requiredDayEnd: requiredDateEndTransform,
             weekendOnly: weekendOnly,
           },
+          status: "created",
           workerPID: 0,
           isBeingScanned: false,
           scannedLast: 0,
@@ -245,6 +246,7 @@ export default function Home() {
           isBeingScanned: false,
           scannedLast: 0,
           nextScan: 0,
+          status: "created",
           alertPrice,
         };
       }
@@ -283,7 +285,7 @@ export default function Home() {
       let fingerPrintResponse;
       if (process.env.NEXT_PUBLIC_BACKEND_LOCAL_API) {
         fingerPrintResponse = await fetch(
-          `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${data.visitorId}/fingerPrint`
+          `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${data.visitorId}/fingerprint-today`
         );
       } else {
         fingerPrintResponse = await fetch(
@@ -305,7 +307,7 @@ export default function Home() {
       }
       const fingerPrintData = await fingerPrintResponse.json();
 
-      if (user.sub === "google-oauth2|107234380339450042425") {
+      if (user && user.sub === "google-oauth2|107234380339450042425") {
         console.log("Hi hi");
       } else if (fingerPrintData > 2) {
         console.log("No more flights for today");
@@ -348,15 +350,31 @@ export default function Home() {
     if (status) {
       let response;
       if (process.env.NEXT_PUBLIC_BACKEND_LOCAL_API) {
+        console.log("########### Alan we're making something here ###################")
         try {
+          console.log(email)
+          const sendPayload = {
+            payload: {
+              ...payload
+            },
+            userInformation: {
+              fingerprint: data.visitorId,
+              email: email || null,
+              user: {
+                sub: user?.sub || null,
+                auth0_email: user?.email || null,
+              },
+            },
+          };
+          console.log(sendPayload)
           response = await fetch(
-            `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/`,
+            `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/typeorm`,
             {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify(payload),
+              body: JSON.stringify(sendPayload),
               cors: "no-cors",
             }
           );
@@ -364,6 +382,8 @@ export default function Home() {
           console.log(error);
         }
       } else {
+        console.log("########### Something is not right ###################")
+
         try {
           response = await fetch(
             // "https://skyscannerplusweb.herokuapp.com/api/users/create/",
