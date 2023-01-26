@@ -212,7 +212,7 @@ export default function Home() {
           workerPID: 0,
           isBeingScanned: false,
           scannedLast: 0,
-          nextScan: 0,
+          nextScan: new Date(),
           alertPrice,
         };
       } else {
@@ -245,7 +245,7 @@ export default function Home() {
           workerPID: 0,
           isBeingScanned: false,
           scannedLast: 0,
-          nextScan: 0,
+          nextScan: new Date(),
           status: "created",
           alertPrice,
         };

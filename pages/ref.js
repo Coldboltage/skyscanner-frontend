@@ -148,7 +148,7 @@ export default function Ref({ query: { ref: queryRef } }) {
     let response;
     if (process.env.NEXT_PUBLIC_HTTP_LOCAL_WEB) {
       response = await fetch(
-        `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${reference}/getByRef`
+        `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${reference}/mostRecentFlightByRef`
       );
     } else {
       try {
@@ -190,7 +190,7 @@ export default function Ref({ query: { ref: queryRef } }) {
       }
     }  
     const data = await response.json();
-    if (data.scanDate.length === 0) {
+    if (data.result.scanDate.length === 0) {
       toast.warn("No scan has been done yet", {
         position: "top-right",
         autoClose: 5000,
@@ -212,7 +212,7 @@ export default function Ref({ query: { ref: queryRef } }) {
           maximumHoliday,
           weekendOnly,
         },
-      } = data;
+      } = data.result;
       setName(name);
       setEmail(email);
       setRef(ref);
@@ -242,7 +242,6 @@ export default function Ref({ query: { ref: queryRef } }) {
       });
       // const data = await response.json();
       // Destructure Result
-      console.log(data)
       const {
         // user: { name, email },
         currency,
@@ -255,7 +254,7 @@ export default function Ref({ query: { ref: queryRef } }) {
           maximumHoliday,
           weekendOnly,
         },
-      } = data;
+      } = data.result;
       console.log(`What is weekendOnly: ${weekendOnly}`);
       setName(name);
       setEmail(email);
