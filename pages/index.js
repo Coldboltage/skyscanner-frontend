@@ -214,6 +214,7 @@ export default function Home() {
           scannedLast: 0,
           nextScan: new Date(),
           alertPrice,
+          alertPriceFired: false,
         };
       } else {
         var payload = {
@@ -248,6 +249,7 @@ export default function Home() {
           nextScan: new Date(),
           status: "created",
           alertPrice,
+          alertPriceFired: false,
         };
       }
 
