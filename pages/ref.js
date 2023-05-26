@@ -33,6 +33,9 @@ export default function Ref({ query: { ref: queryRef } }) {
   const [requiredDateStart, setRequiredDateStart] = useState();
   const [requiredDateEnd, setRequiredDateEnd] = useState();
   const [weekendOnly, setWeekendOnly] = useState(false);
+  const [alertPrice, setAlertPrice] = useState();
+  const [cheapest, setCheapest] = useState();
+
 
   // State specifically for /ref
   const [typedState, setTypedState] = useState(queryRef || "");
@@ -200,10 +203,13 @@ export default function Ref({ query: { ref: queryRef } }) {
         draggable: true,
         progress: undefined,
       });
+      console.log(data.result)
       const {
         // user: { name, email },
         currency,
         ref,
+        cheapest,
+        alertPrice,
         flights: { arrival, departure, returnFlight },
         dates: {
           departureDate,
@@ -227,6 +233,8 @@ export default function Ref({ query: { ref: queryRef } }) {
       setWeekendOnly(weekendOnly === "true" ? "Yes" : "No");
       setCurrency(currency);
       setReturnFlight(returnFlight);
+      setAlertPrice(alertPrice)
+      setCheapest(cheapest)
     }
     
     else if (response.ok === true) {
@@ -244,6 +252,8 @@ export default function Ref({ query: { ref: queryRef } }) {
       // Destructure Result
       const {
         // user: { name, email },
+        cheapest,
+        alertPrice,
         currency,
         ref,
         flights: { arrival, departure, returnFlight },
@@ -273,6 +283,8 @@ export default function Ref({ query: { ref: queryRef } }) {
       setBestFlights(bestFlightsOrderMax);
       setCurrency(currency);
       setReturnFlight(returnFlight);
+      setAlertPrice(alertPrice)
+      setCheapest(cheapest)
     } else {
       console.log("Nothing was found");
       toast.error("No flight could be found with that reference", {
@@ -508,6 +520,49 @@ export default function Ref({ query: { ref: queryRef } }) {
                     // placeholder="return date"
                   />
                 </div>
+                <div>
+                  <label htmlFor="alertPrice">Alert Price</label>
+                  <input
+                    value={alertPrice}
+                    onChange={(e) => setAlertPrice(e.target.value)}
+                    type="number"
+                    placeholder="Price for Alert"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className={styles.inputForm}>
+              <h3>Post Scan Information</h3>
+              <div className={styles.inputCollection}>
+                <div>
+                  <label>Cheapest Cost</label>
+                  <input
+                    disabled
+                    value={cheapest}
+                    type="number"
+                    placceholder='0'
+                  />
+                </div>
+                {/* <div>
+                  <label htmlFor="requiredDateEnding">Reserved Ending</label>
+                  <input
+                    disabled
+                    value={requiredDateEnd}
+                    onChange={(e) => setRequiredDateEnd(e.target.value)}
+                    type="date"
+                    placeholder="return date"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="weekendOnly">Weekend Only</label>
+                  <input
+                    disabled
+                    value={`${weekendOnly}`}
+                    onChange={(e) => setWeekendOnly(e.target.value)}
+                    type="text"
+                    // placeholder="return date"
+                  />
+                </div> */}
               </div>
             </div>
             {/* <input disabled
