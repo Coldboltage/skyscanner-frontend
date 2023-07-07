@@ -29,8 +29,8 @@ export default function Home() {
   // Needed flight information
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
-  const [departureDate, setDepartureDate] = useState();
-  const [returnDate, setReturnDate] = useState();
+  const [departureDate, setDepartureDate] = useState(new Date());
+  const [returnDate, setReturnDate] = useState(new Date());
   const [minimalHoliday, setMinimalHolday] = useState();
   const [maximumHoliday, setMaximumHoliday] = useState();
   // Storing Previous State for Minimal and Max holiday
@@ -352,12 +352,14 @@ export default function Home() {
     if (status) {
       let response;
       if (process.env.NEXT_PUBLIC_BACKEND_LOCAL_API) {
-        console.log("########### Alan we're making something here ###################")
+        console.log(
+          "########### Alan we're making something here ###################"
+        );
         try {
-          console.log(email)
+          console.log(email);
           const sendPayload = {
             payload: {
-              ...payload
+              ...payload,
             },
             userInformation: {
               fingerprint: data.visitorId,
@@ -368,7 +370,7 @@ export default function Home() {
               },
             },
           };
-          console.log(sendPayload)
+          console.log(sendPayload);
           response = await fetch(
             `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/typeorm`,
             {
@@ -384,7 +386,7 @@ export default function Home() {
           console.log(error);
         }
       } else {
-        console.log("########### Something is not right ###################")
+        console.log("########### Something is not right ###################");
 
         try {
           response = await fetch(
@@ -594,6 +596,32 @@ export default function Home() {
                     <option value="true">Return</option>
                     <option value="false">One Way</option>
                   </select>
+                </div>
+
+                {/* Six Week Date Button */}
+                <div>
+                  <label htmlFor="Six Weeks From">Six Weeks from Today</label>
+                  <button
+                    onClick={() => {
+                      setDepartureDate(() => {
+                        const currentDate = new Date();
+
+                        currentDate.setDate(currentDate.getDate() + 60);
+                        const year = currentDate.getFullYear();
+                        const month = String(
+                          currentDate.getMonth() + 1
+                        ).padStart(2, "0");
+                        const day = String(currentDate.getDate()).padStart(
+                          2,
+                          "0"
+                        );
+
+                        return `${year}-${month}-${day}`
+                      });
+                    }}
+                  >
+                    Six weeks
+                  </button>
                 </div>
               </div>
             </div>

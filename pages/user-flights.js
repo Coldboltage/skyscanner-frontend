@@ -10,6 +10,7 @@ import * as dayjs from "dayjs";
 import Layout from "../components/Layout";
 import UserFlightList from "../components/userFlightList";
 import CheapestFlightsItem from "../components/CheapestFlightsItem";
+import UserFlightListRow from "../components/userFlightListRow"
 
 import { useUser } from "@auth0/nextjs-auth0";
 
@@ -146,11 +147,22 @@ export default function Ref() {
               <div className={styles.inputForm}>
                 <h3>References</h3>
                 <div className={styles.flightsContainer}>
+                <table>
+                  <tr>
+                    <th>Reference</th>
+                    <th>Depart</th>
+                    <th>Arrive</th>
+                    <th>Leave</th>
+                    <th>Return</th>
+                    <th>Cheapest</th>
+                  </tr>
                   {" "}
                   {result.map((element, index) => {
-                    console.log(element);
-                    return <UserFlightList key={index} element={element} />;
+                    console.log(element)
+                    return <UserFlightListRow key={index} element={element} />
+                    // return <UserFlightList key={index} element={element} />
                   })}
+                  </table>
                 </div>
               </div>
             </>
