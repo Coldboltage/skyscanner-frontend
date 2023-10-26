@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShortUniqueId from "short-unique-id";
 import Mobile from "is-mobile";
-import { useVisitorData } from "@fingerprintjs/fingerprintjs-pro-react";
 import { useRouter } from "next/router";
 import CurrencySelector from "../components/currencySelector";
 import { useUser } from "@auth0/nextjs-auth0";
@@ -16,6 +15,7 @@ import Layout from "../components/Layout";
 import AirportList from "../components/AirportList";
 import singleNameCombined from "../constant/singleNameCombined";
 import EmailOrLoginButtons from "../components/EmailOrLoginButtons";
+import { getCurrentBrowserFingerPrint } from "@rajesh896/broprint.js";
 
 const uid = new ShortUniqueId({ length: 10 });
 
@@ -54,13 +54,9 @@ export default function Home() {
   });
   const [alertPrice, setAlertPrice] = useState();
   // FingerprintJS
-  const [fingerPrint, setFingerPrint] = useState("");
 
-  const { data } = useVisitorData({ immediate: false });
-  console.log(data);
-
+  const [broprint, setbroprint] = useState("");
   const Router = useRouter();
-
   const { user, error, isLoading } = useUser();
 
   useEffect(() => {
@@ -117,6 +113,18 @@ export default function Home() {
     if (user?.given_name && user?.family_name) {
       setName(`${user.given_name} ${user.family_name}`);
     }
+
+    (async () => {
+      const data = await getCurrentBrowserFingerPrint();
+      setbroprint(data);
+    })();
+
+    // const getFingerPrint = async () => {
+    //   const data = await getCurrentBrowserFingerPrint();
+    //   console.log(data);
+    // };
+
+    // getFingerPrint();
   }, [isLoading]);
 
   // useEffect(() => {
@@ -185,7 +193,7 @@ export default function Home() {
         var payload = {
           user: {
             name: name,
-            fingerPrintId: data.visitorId,
+            fingerPrintId: broprint,
             sub: user.sub,
           },
           created: new Date(),
@@ -221,7 +229,7 @@ export default function Home() {
           user: {
             name: name,
             email: email,
-            fingerPrintId: data.visitorId,
+            fingerPrintId: broprint,
           },
           created: new Date(),
           ref: ref,
@@ -287,7 +295,7 @@ export default function Home() {
       let fingerPrintResponse;
       if (process.env.NEXT_PUBLIC_BACKEND_LOCAL_API) {
         fingerPrintResponse = await fetch(
-          `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${data.visitorId}/fingerprint-today`
+          `http://${process.env.NEXT_PUBLIC_BACKEND_LOCAL_API}/nest-v1/user-flights/${broprint}/fingerprint-today`
         );
       } else {
         fingerPrintResponse = await fetch(
@@ -302,7 +310,7 @@ export default function Home() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ fingerPrintId: data.visitorId }),
+            body: JSON.stringify({ fingerPrintId: broprint }),
             cors: "no-cors",
           }
         );
@@ -362,7 +370,7 @@ export default function Home() {
               ...payload,
             },
             userInformation: {
-              fingerprint: data.visitorId,
+              fingerprint: broprint,
               email: email || null,
               user: {
                 sub: user?.sub || null,
@@ -616,7 +624,7 @@ export default function Home() {
                           "0"
                         );
 
-                        return `${year}-${month}-${day}`
+                        return `${year}-${month}-${day}`;
                       });
                     }}
                   >
